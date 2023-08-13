@@ -1,0 +1,67 @@
+<p class="page-header">Category</p>
+
+<p>
+    <mat-card class="">
+        <div class="m-3">
+            <div *ngFor="let alerts of defaultAlert">
+                <alert [dismissible]="true" [dismissOnTimeout]="alerts.timeout" [type]="alerts.type">
+                    <strong>Message: </strong> {{alerts.msg}}
+                </alert>
+            </div>
+            
+        </div>
+        <mat-card-content>
+    
+            <form [formGroup]="form">
+                <div class="row">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Category Name</mat-label>
+                        <input matInput formControlName="Name"   placeholder="Ex. Soft Drinks">
+                      </mat-form-field>
+                    <div class="col mt-2">
+
+                        <button mat-raised-button class="" (click)="create()" color="primary">{{ updating? 'Update': 'Create'}}</button>
+    
+                    </div>
+                </div>
+    
+            </form>
+    
+        
+    
+        </mat-card-content>
+    </mat-card>
+</p>
+
+<p>
+    <mat-card>
+
+        <mat-card-content>
+            <table mat-table class="" [dataSource]="datasource" matSort>
+                <ng-container matColumnDef="category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Category Name</th>
+                    <td mat-cell *matCellDef="let row">{{row.Name}}</td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let row" >
+                        <div class="example-flex-container">
+                            <button (click)="edit(row)" mat-icon-button >
+                              <mat-icon>edit</mat-icon>
+                            </button>
+                            <button (click)="delete(row)" mat-icon-button color="warn" >
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                           
+                          </div>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+           
+        </mat-card-content>
+        <mat-card-actions>
+            <mat-paginator [pageSizeOptions]="[5,10,25]" ></mat-paginator>
+        </mat-card-actions>
+    </mat-card>
+</p>

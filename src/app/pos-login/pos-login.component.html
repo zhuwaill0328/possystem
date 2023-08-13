@@ -1,0 +1,41 @@
+<div class="main">
+    <mat-card>
+        <div class="m-3">
+            <div *ngFor="let alerts of defaultAlert">
+                <alert [dismissible]="true" [dismissOnTimeout]="alerts.timeout" [type]="alerts.type">
+                    <strong>Message: </strong> {{alerts.msg}}
+                </alert>
+            </div>
+            
+        </div>
+        <mat-card-content>
+            <h4>WELCOME</h4>
+            <br>
+           
+                <form [formGroup]="form">
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Username</mat-label>
+                        <input autocomplete="new-password" formControlName="username" matInput placeholder="Enter Username">
+                        <mat-icon matSuffix>persons</mat-icon>
+                        <mat-error *ngIf="form.invalid">Username is required!</mat-error>
+                    </mat-form-field>
+              
+                    <mat-form-field appearance="fill">
+                        <mat-label>Password</mat-label>
+                        <input autocomplete="new-password" formControlName="password" type="password" matInput placeholder="Enter Password">
+                        <mat-icon matSuffix>lock</mat-icon>
+                        <mat-error *ngIf="form.invalid">Password is required!</mat-error>
+                    </mat-form-field>
+
+                </form>
+          
+    
+        </mat-card-content>
+        <mat-card-actions align="end">
+
+            <button (click)="login()" mat-raised-button color="primary">Login</button>
+           
+        </mat-card-actions>
+    </mat-card>
+</div>

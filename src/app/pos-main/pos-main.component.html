@@ -1,0 +1,24 @@
+<mat-sidenav-container class="container-fluid main-body">
+    <mat-sidenav class="sidenagivation" #sidebar mode="side" opened="">
+    <app-pos-sidenav></app-pos-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content">
+            <div class="toolbar">
+                <mat-toolbar>
+                    <mat-icon (click)="sidebar.toggle()">menu</mat-icon>
+                    <div class="box">
+                        <mat-icon [matMenuTriggerFor]="account">person</mat-icon>
+                        <mat-menu #account="matMenu" xPosition="before">
+                            <button mat-menu-item >Acount</button>
+                            <button mat-menu-item (click)="logout()" >Logout</button>
+                        </mat-menu>
+                    </div>
+                </mat-toolbar>
+            </div>
+            <div class="main">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

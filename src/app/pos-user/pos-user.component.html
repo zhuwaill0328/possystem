@@ -1,0 +1,166 @@
+<p class="page-header">Users</p>
+
+<div class="ro">
+    <div class="m-3">
+        <div *ngFor="let alerts of defaultAlert">
+            <alert [dismissible]="true" [dismissOnTimeout]="alerts.timeout" [type]="alerts.type">
+                <strong>Message: </strong> {{alerts.msg}}
+            </alert>
+        </div>
+
+    </div>
+</div>
+
+<div class="row mb-3">
+    
+    <form [formGroup]="form">
+        <mat-accordion class="example-headers-align">
+            <mat-expansion-panel  (click)="togglePanel(true)" [expanded]="panelOpenState" >
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <Strong>Add User</Strong>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <!--Personal information-->
+                <div class="row">
+                    <div class="col-6">
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput formControlName="lastname" placeholder="Enter last name">
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-6">
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>First Name</mat-label>
+                            <input matInput formControlName="firstname" placeholder="Enter first name">
+                        </mat-form-field>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- end-->
+
+                <!--user account-->
+                <div class="row">
+                    <div class="col-6">
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Username</mat-label>
+                            <input matInput formControlName="username" placeholder="Enter username">
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-6">
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Password</mat-label>
+                            <input autocomplete="new-password" matInput type="password"
+                                formControlName="password" placeholder="Enter password">
+                        </mat-form-field>
+
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Mobile</mat-label>
+                            <input matInput formControlName="phone" placeholder="Enter mobile/gcash number">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Role</mat-label>
+                            <mat-select formControlName="role" value="Standard">
+                                <mat-option value="Standard">Standard</mat-option>
+                                <mat-option value="Cashier">Cashier</mat-option>
+                                <mat-option value="Administrator">Administrator</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-6">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Status</mat-label>
+                            <mat-select formControlName="status" value="Active">
+                                <mat-option value="Active">Active</mat-option>
+                                <mat-option value="Disabled">Disabled</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <!--edd of account-->
+                <mat-action-row align="start">
+
+                    <button mat-raised-button color="primary" (click)="create()">{{updating? 'Update Acount': 'Create Account'}}</button>
+                </mat-action-row>
+
+            </mat-expansion-panel>
+
+
+
+        </mat-accordion>
+
+    </form>
+
+</div>
+
+<p>
+    <mat-card>
+
+        <mat-card-content>
+            <table mat-table class=" table-responsive" [dataSource]="datasource" matSort>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                    <td mat-cell *matCellDef="let row">{{row.Name.Lastname}} {{row.Name.Firstname}}</td>
+                </ng-container>
+                <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Gcash #</th>
+                    <td mat-cell *matCellDef="let row">{{row.Phone}}</td>
+                </ng-container>
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+                    <td mat-cell *matCellDef="let row">{{row.Role}}</td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                    <td mat-cell *matCellDef="let row">{{row.Status}}</td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="example-flex-container">
+                            <button (click)="edit(row)" mat-icon-button>
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button (click)="delete(row)" mat-icon-button color="warn">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+
+                        </div>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+        </mat-card-content>
+        <mat-card-actions>
+            <mat-paginator [pageSizeOptions]="[5,10,25]"></mat-paginator>
+        </mat-card-actions>
+    </mat-card>
+</p>

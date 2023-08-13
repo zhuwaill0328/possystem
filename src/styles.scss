@@ -1,1 +1,73 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 /* You can add global styles to this file, and also import other style files */
+
+
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
+
+html, body { height: 100% !important; width: 100% !important; }
+body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; font-family: Roboto, "Helvetica Neue", sans-serif; position: relative; }
+
+.form-control{
+    font-size: 18px;
+    height: 50px;
+}
+
+td,tr{
+    vertical-align: middle;
+    text-align: center;
+    font-size: 18px;
+    color: rgb(42, 42, 42) !important;
+
+}
+th{
+    color: rgb(71, 71, 71) !important;
+
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.page-header{
+    font-size: 20px;
+    font-weight: 800;
+    color: rgb(93, 93, 93);
+}
+.example-full-width{
+    width: 100%;
+}
+
+
+@media only screen and (min-width : 320px ) and (max-width : 500px) {
+    body{
+        width: 100%;
+    }
+
+    mat-sidenav{
+         width: 0px;
+     }
+     .menu-item{
+        width: 100%;
+        .menu-button{
+            width: 100%;
+            display: block;
+            font-size: 0px;
+            height: 20px;
+            text-align: left ;
+            color: white !important;
+           
+        }
+    
+
+        :hover{
+            background-color: darkblue;
+        }
+     
+        
+    }
+     
+     
+ }
