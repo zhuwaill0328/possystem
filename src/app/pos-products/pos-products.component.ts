@@ -11,6 +11,7 @@ import { response } from 'express';
 import { map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PosInoutmodalComponent } from '../pos-inoutmodal/pos-inoutmodal.component';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-pos-products',
@@ -22,7 +23,7 @@ export class POSProductsComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  displayedColumns: any = ['category', 'name', 'stocks', 'cost', 'price', 'status', 'actions'];
+  displayedColumns: any = ['barcode', 'category', 'name', 'stocks', 'cost', 'price', 'status', 'actions'];
 
   datasource: MatTableDataSource<any> = new MatTableDataSource<any>;
 
@@ -51,10 +52,14 @@ export class POSProductsComponent {
   results: any = []
   categories: any = []
 
+
+
   constructor(private dialog: MatDialog, private http: HttpClient, private mdb: MongodbService) {
 
   }
   ngAfterViewInit(): void {
+
+    this.imgurl = environment.EndPoint + "uploads/unknown.png"
 
   }
 
@@ -143,10 +148,40 @@ export class POSProductsComponent {
 
       this.results = data.data;
       this.datasource = new MatTableDataSource<any>(this.results);
-      this.datasource.paginator = this.paginator;
-
+      this.datatableSettings();
     })
 
+  }
+
+  datatableSettings() {
+    this.datasource.paginator = this.paginator;
+    this.datasource.sort = this.sort;
+    this.filterSettings();
+  }
+
+  filterSettings() {
+    this.datasource.filterPredicate = (data: any, filter: string): boolean => {
+      return data.Serials.Barcode.toLowerCase().includes(filter.toLowerCase())
+        || data.Name.toLowerCase().includes(filter.toLowerCase())
+        || data.Category.toLowerCase().includes(filter.toLowerCase())
+    }
+  }
+
+  filterBy(keyword: any) {
+    switch (keyword) {
+      case "Out":
+        this.datasource = new MatTableDataSource(this.results.filter((filter: any) => filter.Stocks.Quantity == 0));
+        break;
+      case "Low":
+
+        this.datasource = new MatTableDataSource(this.results.filter((filter: any) => filter.Stocks.Quantity <= filter.Stocks.Threshold));
+        break;
+
+      case "Available":
+        this.datasource = new MatTableDataSource(this.results.filter((filter:any) => filter.Stocks.Quantity > 0));
+        break;
+    }
+    this.datatableSettings();
   }
 
   editStock(row: any, isadd: boolean) {
@@ -167,6 +202,7 @@ export class POSProductsComponent {
 
   updating: boolean = false;
   datatoupdate: any;
+  readonly: boolean = false;
 
   edit(data: any) {
 
@@ -179,6 +215,7 @@ export class POSProductsComponent {
       this.form.controls.weight.patchValue(data.Stocks.Weight)
 
     }
+    this.readonly = true;
     this.form.controls.threshold.patchValue(data.Stocks.Threshold)
     this.form.controls.barcode.patchValue(data.Serials.Barcode)
     this.form.controls.sku.patchValue(data.Serials.SKU)
@@ -189,7 +226,7 @@ export class POSProductsComponent {
     this.selectedFileName = data.Image
     this.datatoupdate = data;
 
-    this.imgurl = "http://localhost:8080/uploads/img_" + data.Image
+    this.imgurl = environment.EndPoint + "uploads/img_" + data.Image
 
     this.togglePanel(true);
     this.step = 0;
@@ -203,34 +240,60 @@ export class POSProductsComponent {
   }
 
 
-  delete(data: any) {
+  delete(data: any, dr: any) {
+    this.formDirective = dr;
 
-    const bodyData = {
-      Id: data._id
-    }
+    let dialogref = this.dialog.open(DialogComponent, {
+      data: {
+        message: "Delete product " + data.Name,
+        title: "Are you sure?",
+        confirmtext: "Yes delete",
+        canceltext: "No"
+      }
+    });
 
-    this.defaultAlert = []
-    this.http.delete(this.mdb.getProductEndpoint(queryType.DELETE), { body: bodyData, responseType: 'json', headers: this.mdb.headers })
-      .subscribe((data: any) => {
 
-        if (data.status) {
+    dialogref.afterClosed().subscribe(result => {
+      if (result) {
 
-          this.reloadPage();
-          this.defaultAlert.push({
-            type: 'success',
-            msg: data.message,
-            timeout: 5000,
-          });
-        } else {
-          this.defaultAlert.push({
-            type: 'danger',
-            msg: data.message,
-            timeout: 5000,
-          });
+        const bodyData = {
+          Id: data._id
         }
 
-      })
+        this.defaultAlert = []
+        this.http.delete(this.mdb.getProductEndpoint(queryType.DELETE), { body: bodyData, responseType: 'json', headers: this.mdb.headers })
+          .subscribe((data: any) => {
 
+            if (data.status) {
+
+              this.reloadPage();
+              this.defaultAlert.push({
+                type: 'success',
+                msg: data.message,
+                timeout: 5000,
+              });
+            } else {
+              this.defaultAlert.push({
+                type: 'danger',
+                msg: data.message,
+                timeout: 5000,
+              });
+            }
+
+          })
+
+      }
+    })
+
+
+
+
+
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
 
@@ -240,7 +303,7 @@ export class POSProductsComponent {
     this.getData();
     this.form.reset();
     this.formDirective.resetForm();
-    this.imgurl = ""
+    this.imgurl = environment.EndPoint + "uploads/unknown.png"
     this.updating = false;
     this.datatoupdate = '';
     this.form.controls.soldby.patchValue('Quantity');
@@ -250,7 +313,7 @@ export class POSProductsComponent {
     this.form.controls.threshold.patchValue('0');
     this.form.controls.price.patchValue(0.00);
     this.form.controls.cost.patchValue(0.00);
-
+    this.readonly = false;
     //window.location.reload();
   }
 

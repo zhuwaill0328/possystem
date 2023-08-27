@@ -1,0 +1,58 @@
+<mat-card>
+    <mat-card-header>
+        <mat-form-field class="example-full-width">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Enter keywords here..." #input>
+          </mat-form-field>
+    </mat-card-header>
+    <mat-card-actions>
+        <mat-paginator [pageSizeOptions]="[20,50,100]" ></mat-paginator>
+    </mat-card-actions>
+    <mat-card-content>
+
+        
+
+        <table mat-table class="table table-responsive table-striped" [dataSource]="datasource" matSort>
+
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.CreatedAt | date: 'YYYY-mm-dd hh:mm'}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.Product.Category}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="product">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.Product.Name}}
+                </td>
+            </ng-container>
+            
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                <td mat-cell *matCellDef="let row">
+                {{row.User.Name}} {{row.Type}} {{row.Quantity}} items
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+       
+
+
+
+
+       
+          
+       
+    </mat-card-content>
+    
+</mat-card>

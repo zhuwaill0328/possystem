@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-pos-sidenav',
@@ -9,6 +10,7 @@ export class POSSidenavComponent implements OnInit {
 
   fullname: any= ""
   role:any = ""
+  logourl = environment.logourl;
   ngOnInit(): void {
     if(sessionStorage.getItem('role') == 'Cashier') this.iscashier =true;
     else if(sessionStorage.getItem('role') == 'Standard') this.isStandard =true;

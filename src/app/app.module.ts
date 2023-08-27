@@ -56,6 +56,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
 import { PosInoutmodalComponent } from './pos-inoutmodal/pos-inoutmodal.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { PosInoutmodalComponent } from './pos-inoutmodal/pos-inoutmodal.componen
     POSUserComponent,
     POSSidenavComponent,
     PosProductinoutComponent,
-    PosInoutmodalComponent
+    PosInoutmodalComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,

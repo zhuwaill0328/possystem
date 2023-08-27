@@ -63,6 +63,10 @@ export class MongodbService {
 
   }
 
+  getStockHistoryEndPoint(){
+    return environment.EndPoint + "product/stockhistory";
+  }
+
   getProductEndpoint(action: queryType){
 
     switch(action){

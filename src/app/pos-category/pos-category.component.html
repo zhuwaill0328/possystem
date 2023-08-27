@@ -1,15 +1,19 @@
 <p class="page-header">Category</p>
 
+<div class="">
+    <div class="m-3">
+        <div *ngFor="let alerts of defaultAlert">
+            <alert [dismissible]="true" [dismissOnTimeout]="alerts.timeout" [type]="alerts.type">
+                <strong>Message: </strong> {{alerts.msg}}
+            </alert>
+        </div>
+
+    </div>
+</div>
+
 <p>
     <mat-card class="">
-        <div class="m-3">
-            <div *ngFor="let alerts of defaultAlert">
-                <alert [dismissible]="true" [dismissOnTimeout]="alerts.timeout" [type]="alerts.type">
-                    <strong>Message: </strong> {{alerts.msg}}
-                </alert>
-            </div>
-            
-        </div>
+      
         <mat-card-content>
     
             <form [formGroup]="form" #formDirective="ngForm">
@@ -20,7 +24,7 @@
                       </mat-form-field>
                     <div class="col mt-2">
 
-                        <button mat-raised-button class="" (click)="create(formDirective)" color="primary">{{ updating? 'Update': 'Create'}}</button>
+                        <button mat-raised-button class="" (click)="create(formDirective)" color="primary">{{ updating? 'Update': 'Create'}} Category</button>
     
                     </div>
                 </div>
@@ -35,10 +39,19 @@
 
 <p>
     <mat-card>
+        <mat-card-header>
+            <mat-form-field class="example-full-width">
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Enter keywords here..." #input>
+              </mat-form-field>
+        </mat-card-header>
         <mat-card-actions>
-            <mat-paginator [pageSizeOptions]="[10,25,50]" ></mat-paginator>
+            
+            <mat-paginator [pageSizeOptions]="[20,50,100]" ></mat-paginator>
         </mat-card-actions>
         <mat-card-content>
+            
+
             <table mat-table class="table table-responsive table-hover" [dataSource]="datasource" matSort>
                 <ng-container matColumnDef="category">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Category Name</th>
@@ -51,7 +64,7 @@
                             <button (click)="edit(row)" mat-icon-button >
                               <mat-icon>edit</mat-icon>
                             </button>
-                            <button (click)="delete(row)" mat-icon-button color="warn" >
+                            <button (click)="delete(row,formDirective)" mat-icon-button color="warn" >
                               <mat-icon>delete</mat-icon>
                             </button>
                            
