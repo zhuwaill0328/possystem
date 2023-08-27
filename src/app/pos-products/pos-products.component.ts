@@ -34,7 +34,8 @@ export class POSProductsComponent {
     sku: new FormControl(''),
     price: new FormControl('0.00', Validators.required),
     cost: new FormControl('0.00', Validators.required),
-    image: new FormControl('')
+    image: new FormControl(''),
+    unit: new FormControl('')
   })
 
   defaultAlert: any = [{

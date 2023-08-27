@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pos-login',
@@ -11,7 +13,7 @@ import { AuthService } from '../shared/auth.service';
 export class POSLoginComponent implements OnInit {
 
 
-  constructor(private router: Router, private auth: AuthService){
+  constructor(private router: Router, private auth: AuthService,private http: HttpClient){
 
   }
   //declarations
@@ -39,24 +41,35 @@ export class POSLoginComponent implements OnInit {
     if(result) this.router.navigate(['/home/dashboard'])
   }
 
-  login(){
-    
-    if(this.form.valid){
-        const username  = this.form.value.username ? this.form.value.username : '';
-        const password = this.form.value.password ? this.form.value.password :'';
 
-        let result:any = this.auth.login(username,password);
-        if(result){
+  async login() {
+
+    if(this.form.valid){
+      const username  = this.form.value.username ? this.form.value.username : '';
+      const password = this.form.value.password ? this.form.value.password :'';
+      const bodyData={
+        Username: username,
+        Password: password
+      }
+      await this.http.post(environment.EndPoint + 'user/login', bodyData,{responseType :'json'})
+      .subscribe((result:any)=>{
+  
+        if(result.status){
+          sessionStorage.setItem('token', result.token);
+          sessionStorage.setItem('user_id',result.data._id);
+          sessionStorage.setItem('user',result.data.Name.Firstname + " " +  result.data.Name.Lastname);
+          sessionStorage.setItem('role', result.data.Role);
           this.router.navigate(['/home/dashboard']);
+          
         }else{
-          alert('Cant connect to API')
+          this.form.markAllAsTouched()
+          this.form.markAsDirty()
+          alert("Invalid username or password");
         }
         
-    }else{
-      this.form.markAllAsTouched()
-      this.form.markAsDirty()
-    }
+      });
 
+    }
 
 
   }

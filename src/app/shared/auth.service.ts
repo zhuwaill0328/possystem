@@ -28,31 +28,5 @@ export class AuthService {
     this.router.navigate(['/login'])
   }
 
-  login(username: String,password: String) {
-
-    const bodyData={
-      Username: username,
-      Password: password
-    }
-
-    
-   return this.http.post(environment.EndPoint + 'user/login', bodyData,{responseType :'json'})
-    .subscribe((result:any)=>{
-
-      if(result.status){
-        sessionStorage.setItem('token', result.token);
-        sessionStorage.setItem('user_id',result.data._id);
-        sessionStorage.setItem('user',result.data.Name.Firstname + " " +  result.data.Name.Lastname);
-        sessionStorage.setItem('role', result.data.Role);
-          return true;
-      }else{
-
-        return false;
-      }
-      
-    });
-
  
-
-  }
 }

@@ -1,4 +1,6 @@
 <div class="main">
+    <form [formGroup]="form">
+
     <mat-card>
         <div class="m-3">
             <div *ngFor="let alerts of defaultAlert">
@@ -12,8 +14,7 @@
             <h4>WELCOME</h4>
             <br>
            
-                <form [formGroup]="form">
-
+              
                     <mat-form-field appearance="fill">
                         <mat-label>Username</mat-label>
                         <input autocomplete="new-password" formControlName="username" matInput placeholder="Enter Username">
@@ -23,13 +24,11 @@
               
                     <mat-form-field appearance="fill">
                         <mat-label>Password</mat-label>
-                        <input autocomplete="new-password" formControlName="password" type="password" matInput placeholder="Enter Password">
+                        <input autocomplete="off" formControlName="password" type="password" matInput placeholder="Enter Password">
                         <mat-icon matSuffix>lock</mat-icon>
                         <mat-error *ngIf="form.invalid">Password is required!</mat-error>
                     </mat-form-field>
 
-                </form>
-          
     
         </mat-card-content>
         <mat-card-actions align="end">
@@ -38,4 +37,8 @@
            
         </mat-card-actions>
     </mat-card>
+
+    
+</form>
+          
 </div>
