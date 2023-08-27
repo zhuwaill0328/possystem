@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,13 +12,15 @@ import { map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PosInoutmodalComponent } from '../pos-inoutmodal/pos-inoutmodal.component';
 import { DialogComponent } from '../dialog/dialog.component';
+import { AuthService } from '../shared/auth.service';
+import { GlobalfunctionsService } from '../shared/globalfunctions.service';
 
 @Component({
   selector: 'app-pos-products',
   templateUrl: './pos-products.component.html',
   styleUrls: ['./pos-products.component.scss']
 })
-export class POSProductsComponent {
+export class POSProductsComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -54,14 +56,18 @@ export class POSProductsComponent {
 
 
 
-  constructor(private dialog: MatDialog, private http: HttpClient, private mdb: MongodbService) {
+  constructor(private gf: GlobalfunctionsService,private dialog: MatDialog, private http: HttpClient, private mdb: MongodbService,private auth: AuthService) {
 
   }
-  ngAfterViewInit(): void {
 
-    this.imgurl = environment.EndPoint + "uploads/unknown.png"
+  openeditor:boolean =false;
+
+  addNew(){
+
+    this.openeditor =true;
 
   }
+  
 
   getProductStatus(data: any) {
 
@@ -128,6 +134,8 @@ export class POSProductsComponent {
   ngOnInit(): void {
     this.loadCategories();
     this.getData();
+    this.imgurl = environment.EndPoint + "uploads/unknown.png"
+
   }
 
   loadCategories() {
@@ -204,9 +212,17 @@ export class POSProductsComponent {
   datatoupdate: any;
   readonly: boolean = false;
 
+  gotoTop() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
   edit(data: any) {
 
-
+    this.openeditor=true;
     this.form.controls.category.patchValue(data.Category)
     this.form.controls.name.patchValue(data.Name)
     this.form.controls.quantity.patchValue(data.Stocks.Quantity)
@@ -230,6 +246,8 @@ export class POSProductsComponent {
 
     this.togglePanel(true);
     this.step = 0;
+    this.gotoTop();
+
 
   }
 
@@ -299,7 +317,7 @@ export class POSProductsComponent {
 
 
   reloadPage() {
-
+    this.openeditor =false;
     this.getData();
     this.form.reset();
     this.formDirective.resetForm();
@@ -314,6 +332,7 @@ export class POSProductsComponent {
     this.form.controls.price.patchValue(0.00);
     this.form.controls.cost.patchValue(0.00);
     this.readonly = false;
+  
     //window.location.reload();
   }
 
@@ -325,11 +344,46 @@ export class POSProductsComponent {
 
   checkqtype() {
     if (this.form.value.soldby == "Quantity") {
-      return 'Kg';
+      return 'Pcs';
     } else {
       return this.form.value.unit;
     }
   }
+
+  StockIn(data:any) {
+
+    if (this.form.valid) {
+
+      const bodyData = {
+
+        StockHistory: {
+          Product: {
+            Id: data._id,
+            Name: data.Name,
+            Category: data.Category
+          },
+          Type:  "Stock In",
+          CurrentQuantity:0,
+          Quantity: data.Stocks.Quantity,
+          User:this.auth.getCurrentUser()
+        },
+        New: true
+      }
+
+      this.http.post(this.mdb.getProductEndpoint(queryType.STOCK),bodyData, {
+        responseType: 'json', headers: this.mdb.headers
+      }).subscribe((result:any)=>{
+        
+        this.reloadPage();
+
+      })
+
+
+
+    }
+
+  }
+
 
   addData() {
     this.defaultAlert = []
@@ -357,7 +411,7 @@ export class POSProductsComponent {
 
       if (data.status) {
         this.uploadImage();
-        this.reloadPage();
+        this.StockIn(data.data);
         this.defaultAlert.push({
           type: 'success',
           msg: data.message,
@@ -437,10 +491,16 @@ export class POSProductsComponent {
 
   async create(dr: any) {
 
+    if(!this.form.controls.barcode.valid){
+      this.form.controls.barcode.setValue(Date.now().toString());
+    }
+
     if (this.form.valid) {
       let cost: any = this.form.value.cost;
       let price: any = this.form.value.price;
       this.formDirective = dr
+
+      
       if (cost > price) {
         this.defaultAlert.push({
           type: 'danger',

@@ -45,6 +45,15 @@ th{
 .quarter-width{
     width: 25%;
 }
+table{
+    overflow: auto;
+    max-width: 100%;
+}
+
+td.mat-column-action {
+    width: 20px;
+    padding-right: 8px;
+  }
 
 
 @media only screen and (min-width : 320px ) and (max-width : 500px) {

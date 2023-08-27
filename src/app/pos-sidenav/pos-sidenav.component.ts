@@ -49,7 +49,7 @@ export class POSSidenavComponent implements OnInit {
   {
     routerLink:'stockinout',
     icon: 'category',
-    label: 'Stock In/Out',
+    label: 'Stock History',
     allowed: this.isAdmin 
   },
   {

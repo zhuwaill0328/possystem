@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { GlobalfunctionsService } from '../shared/globalfunctions.service';
 @Component({
   selector: 'app-pos-category',
   templateUrl: './pos-category.component.html',
@@ -38,7 +39,7 @@ export class POSCategoryComponent implements OnInit, AfterViewInit {
   results: any = []
 
 
-  constructor(private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog) {
+  constructor(private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog,private gf: GlobalfunctionsService) {
 
   }
   ngAfterViewInit(): void {
@@ -65,12 +66,24 @@ export class POSCategoryComponent implements OnInit, AfterViewInit {
 
   updating: boolean = false;
   datatoupdate: any;
+  
   edit(data: any) {
     this.updating = true;
     this.form.controls.Name.setValue(data.Name);
     this.datatoupdate = data;
+    this.gotoTop();
 
   }
+
+  gotoTop() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+
 
 
   applyFilter(event: Event) {
