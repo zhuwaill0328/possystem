@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment.development';
   INSERT = 0,
   UPDATE = 1,
   DELETE = 2,
-  READ = 4
+  READ = 4,
+  STOCK = 5
     
 }
 
@@ -65,6 +66,9 @@ export class MongodbService {
   getProductEndpoint(action: queryType){
 
     switch(action){
+      case queryType.STOCK:
+        return environment.EndPoint + "product/stocks"
+        break;
       case queryType.INSERT:
         return environment.EndPoint + "product/create";
         break;
@@ -75,6 +79,8 @@ export class MongodbService {
           return environment.EndPoint + "product/delete";
           break;
       case queryType.READ:
+        return environment.EndPoint + "product/get";
+        break;
       default:
         return environment.EndPoint + "product/get";
 

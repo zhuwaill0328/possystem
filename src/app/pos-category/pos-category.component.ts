@@ -106,6 +106,7 @@ export class POSCategoryComponent implements OnInit ,AfterViewInit {
    reloadPage(){
        this.getData();
       this.form.reset();
+      this.formDirective.resetForm();
       this.form.markAsUntouched();
       this.form.controls.Name.markAsUntouched();
       this.updating =false;
@@ -178,10 +179,12 @@ export class POSCategoryComponent implements OnInit ,AfterViewInit {
 
   }
 
-  async create() {
+  formDirective:any;
+  async create(dr:any) {
 
     if (this.form.valid) {
-      
+      this.formDirective = dr;
+
       if(this.updating){
         this.updateData(this.datatoupdate);
       }else{

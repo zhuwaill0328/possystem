@@ -10,48 +10,72 @@ export class POSSidenavComponent implements OnInit {
   fullname: any= ""
   role:any = ""
   ngOnInit(): void {
+    if(sessionStorage.getItem('role') == 'Cashier') this.iscashier =true;
+    else if(sessionStorage.getItem('role') == 'Standard') this.isStandard =true;
+    else this.isAdmin =true;
+
     this.fullname = sessionStorage.getItem('user')
     this.role = sessionStorage.getItem('role')
   }
+
+
+
+  isAdmin:boolean=false;
+  isStandard:boolean =false;
+  iscashier: boolean =false;
 
   collapsed = false;
   navData = [{  
     routerLink:'dashboard',
     icon: 'dashboard',
-    label: 'Dashboard'
+    label: 'Dashboard',
+    allowed: true
+  },
+  
+  {
+    routerLink:'category',
+    icon: 'category',
+    label: 'Category',
+    allowed: this.isAdmin 
   },
   {
     routerLink:'products',
     icon: 'category',
-    label: 'Products'
+    label: 'Products',
+    allowed: this.isAdmin 
   },
   {
-    routerLink:'category',
+    routerLink:'stockinout',
     icon: 'category',
-    label: 'Category'
+    label: 'Stock In/Out',
+    allowed: this.isAdmin 
   },
   {
     routerLink:'/pos',
     icon: 'payments',
-    label: 'POS Terminal'
+    label: 'POS Terminal',
+    allowed: this.isAdmin || this.iscashier
   },
   
   {
     routerLink:'transactions',
     icon: 'payments',
-    label: 'Transaction'
+    label: 'Transaction',
+    allowed: true
   }
   ,
   {
     routerLink:'gcash',
     icon: 'payments',
-    label: 'Gcash In-Out'
+    label: 'Gcash In-Out',
+    allowed: true
   }
   ,
   {
     routerLink:'users',
     icon: 'payments',
-    label: 'Users'
+    label: 'Users',
+    allowed: this.isAdmin
   }
 
 

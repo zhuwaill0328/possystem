@@ -28,5 +28,15 @@ export class AuthService {
     this.router.navigate(['/login'])
   }
 
+  getCurrentUser(){
+
+    const user:any = {
+      Name: sessionStorage.getItem('user'),
+      Role: sessionStorage.getItem('role')
+    }
+    
+    return user;
+  }
+
  
 }

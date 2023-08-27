@@ -31,7 +31,7 @@ export class POSUserComponent {
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
   })
-
+  formDirective:any;
   defaultAlert: any = [{
     type: '',
     msg: '',
@@ -126,6 +126,7 @@ togglePanel(data:boolean ) {
 
     this.getData();
     this.form.reset();
+    this.formDirective.resetForm();
     this.form.markAsUntouched();
     this.form.controls.firstname.markAsUntouched();
     this.updating = false;
@@ -225,10 +226,10 @@ togglePanel(data:boolean ) {
 
   }
 
-  async create() {
+  async create(dr:any) {
 
     if (this.form.valid) {
-
+      this.formDirective = dr;
       if (this.updating) {
         this.updateData(this.datatoupdate);
       } else {

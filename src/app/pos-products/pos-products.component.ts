@@ -1,11 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MongodbService, queryType } from '../shared/mongodb.service';
 import { validateVerticalPosition } from '@angular/cdk/overlay';
+import { environment } from 'src/environments/environment.development';
+import { response } from 'express';
+import { map } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { PosInoutmodalComponent } from '../pos-inoutmodal/pos-inoutmodal.component';
 
 @Component({
   selector: 'app-pos-products',
@@ -17,7 +22,7 @@ export class POSProductsComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  displayedColumns: any = ['category', 'name', 'stocks', 'cost', 'price', 'status','actions'];
+  displayedColumns: any = ['category', 'name', 'stocks', 'cost', 'price', 'status', 'actions'];
 
   datasource: MatTableDataSource<any> = new MatTableDataSource<any>;
 
@@ -26,16 +31,16 @@ export class POSProductsComponent {
   form = new FormGroup({
     category: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
-    quantity: new FormControl('0', Validators.required),
+    quantity: new FormControl(0, Validators.min(1)),
     soldby: new FormControl('Quantity', Validators.required),
-    weight: new FormControl('0',Validators.required),
+    weight: new FormControl('0', Validators.required),
     threshold: new FormControl('0', Validators.required),
     barcode: new FormControl('', Validators.required),
     sku: new FormControl(''),
-    price: new FormControl('0.00', Validators.required),
-    cost: new FormControl('0.00', Validators.required),
-    image: new FormControl(''),
-    unit: new FormControl('')
+    price: new FormControl(0.00, Validators.min(1)),
+    cost: new FormControl(0.00, Validators.min(1)),
+    image: new FormControl(),
+    unit: new FormControl('Kg', Validators.required)
   })
 
   defaultAlert: any = [{
@@ -46,34 +51,75 @@ export class POSProductsComponent {
   results: any = []
   categories: any = []
 
-  constructor(private http: HttpClient, private mdb: MongodbService) {
+  constructor(private dialog: MatDialog, private http: HttpClient, private mdb: MongodbService) {
 
   }
   ngAfterViewInit(): void {
 
-
-
   }
 
-  getProductStatus(data:any){
+  getProductStatus(data: any) {
 
-    if(data.Stocks.Quantity == 0){
+    if (data.Stocks.Quantity == 0) {
 
       return "Out of Stock";
-    }else if( data.Stocks.Quantity <= data.Stocks.Threshold){
-      return "Low Stocks"
-    }else{
+    } else if (data.Stocks.Quantity <= data.Stocks.Threshold) {
+      return "Low on Stocks"
+    } else {
       return 'Available'
     }
 
   }
 
-  selectedFile: any = null;
+  selectedFile: any;
+  selectedFileName: any = "";
+  imgurl: any;
 
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] ?? null;
 
+    if (!event.target.files[0] || event.target.files[0].length == 0) {
+
+      this.defaultAlert.push({
+        type: 'danger',
+        msg: "You must select an image",
+        timeout: 10000,
+      });
+      return;
+    }
+    var mimeType = event.target.files[0].type;
+
+    if (mimeType.match(/image\/*/) == null) {
+      this.defaultAlert.push({
+        type: 'danger',
+        msg: "File not supported. Only Images are supported.",
+        timeout: 10000,
+      });
+      return;
+    }
+
+    this.selectedFile = event.target.files[0] ?? null;
+    this.selectedFileName = this.selectedFile?.name
+    var reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+
+    reader.onload = (_event) => {
+      this.imgurl = reader.result;
+    }
   }
+
+  uploadImage() {
+    const formdata = new FormData();
+    formdata.append('image', this.selectedFile)
+    const bodyData = {
+      filename: Date.now()
+    }
+    this.http.post(environment.EndPoint + "upload", formdata)
+      .subscribe((res) => {
+        this.selectedFileName = "";
+        this.selectedFile = null;
+      });
+  }
+
   ngOnInit(): void {
     this.loadCategories();
     this.getData();
@@ -85,7 +131,6 @@ export class POSProductsComponent {
     this.http.get(this.mdb.getCategoryEndPoint(queryType.READ), { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
       this.categories = data.data;
-      console.log(this.categories)
 
     })
 
@@ -104,29 +149,47 @@ export class POSProductsComponent {
 
   }
 
+  editStock(row: any, isadd: boolean) {
+    if (isadd) row.Type = "Stock In";
+    else row.Type = "Stock out";
+
+    let dialogRef = this.dialog.open(PosInoutmodalComponent, {
+      width: '20vw',
+      data: row
+
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getData();
+    })
+
+  }
+
   updating: boolean = false;
   datatoupdate: any;
 
   edit(data: any) {
 
-    
+
     this.form.controls.category.patchValue(data.Category)
     this.form.controls.name.patchValue(data.Name)
     this.form.controls.quantity.patchValue(data.Stocks.Quantity)
     this.form.controls.soldby.patchValue(data.Stocks.Soldby)
-    if(data.Stocks.Weight){
+    if (data.Stocks.Weight) {
       this.form.controls.weight.patchValue(data.Stocks.Weight)
-  
+
     }
-     this.form.controls.threshold.patchValue(data.Stocks.Threshold)
+    this.form.controls.threshold.patchValue(data.Stocks.Threshold)
     this.form.controls.barcode.patchValue(data.Serials.Barcode)
     this.form.controls.sku.patchValue(data.Serials.SKU)
     this.form.controls.price.patchValue(data.Price)
     this.form.controls.cost.patchValue(data.Cost)
-    this.form.controls.image.patchValue(data.image)
+    this.form.controls.unit.patchValue(data.Stocks.UnitofMeasurement)
     this.updating = true;
-    this.selectedFile = data.image
+    this.selectedFileName = data.Image
     this.datatoupdate = data;
+
+    this.imgurl = "http://localhost:8080/uploads/img_" + data.Image
 
     this.togglePanel(true);
     this.step = 0;
@@ -171,22 +234,38 @@ export class POSProductsComponent {
   }
 
 
+
   reloadPage() {
-    this.panelOpenState = false;
 
     this.getData();
     this.form.reset();
-    this.form.markAsUntouched();
+    this.formDirective.resetForm();
+    this.imgurl = ""
     this.updating = false;
     this.datatoupdate = '';
+    this.form.controls.soldby.patchValue('Quantity');
+    this.form.controls.unit.patchValue("Kg");
+    this.form.controls.weight.patchValue('0');
+    this.form.controls.quantity.patchValue(0);
+    this.form.controls.threshold.patchValue('0');
+    this.form.controls.price.patchValue(0.00);
+    this.form.controls.cost.patchValue(0.00);
 
-
+    //window.location.reload();
   }
 
   step = 0;
 
   setStep(index: number) {
     this.step = index;
+  }
+
+  checkqtype() {
+    if (this.form.value.soldby == "Quantity") {
+      return 'Kg';
+    } else {
+      return this.form.value.unit;
+    }
   }
 
   addData() {
@@ -198,7 +277,8 @@ export class POSProductsComponent {
         Soldby: this.form.value.soldby,
         Quantity: this.form.value.quantity,
         Weight: this.form.value.weight ? this.form.value.weight : '0',
-        Threshold: this.form.value.threshold
+        Threshold: this.form.value.threshold,
+        UnitofMeasurement: this.checkqtype()
       },
       Serials: {
         Barcode: this.form.value.barcode,
@@ -206,13 +286,14 @@ export class POSProductsComponent {
       },
       Price: this.form.value.price,
       Cost: this.form.value.cost,
-      Image: this.form.value.image
+      Image: this.selectedFileName
 
     }
-    console.log(bodyData)
+
     this.http.post(this.mdb.getProductEndpoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
       if (data.status) {
+        this.uploadImage();
         this.reloadPage();
         this.defaultAlert.push({
           type: 'success',
@@ -244,8 +325,9 @@ export class POSProductsComponent {
       Stocks: {
         Soldby: this.form.value.soldby,
         Quantity: this.form.value.quantity,
-        Weight: this.form.value.weight? this.form.value.weight : '0',
-        Threshold: this.form.value.threshold
+        Weight: this.form.value.weight ? this.form.value.weight : '0',
+        Threshold: this.form.value.threshold,
+        UnitofMeasurement: this.checkqtype()
       },
       Serials: {
         Barcode: this.form.value.barcode,
@@ -253,15 +335,18 @@ export class POSProductsComponent {
       },
       Price: this.form.value.price,
       Cost: this.form.value.cost,
-      Image: this.selectedFile?.name
+      Image: this.selectedFileName
 
     }
-
-    console.log(bodyData)
 
     this.http.patch(this.mdb.getProductEndpoint(queryType.UPDATE), bodyData, { responseType: 'json', headers: this.mdb.headers })
       .subscribe((data: any) => {
         if (data.status) {
+
+          if (this.selectedFileName) {
+            this.uploadImage()
+          }
+
           this.reloadPage();
           this.defaultAlert.push({
             type: 'success',
@@ -285,9 +370,22 @@ export class POSProductsComponent {
 
   }
 
-  async create() {
+  formDirective: any;
+
+  async create(dr: any) {
 
     if (this.form.valid) {
+      let cost: any = this.form.value.cost;
+      let price: any = this.form.value.price;
+      this.formDirective = dr
+      if (cost > price) {
+        this.defaultAlert.push({
+          type: 'danger',
+          msg: "Invalid product price. It must be greater than product cost.",
+          timeout: 10000,
+        });
+        return;
+      }
 
       if (this.updating) {
         this.updateData(this.datatoupdate);
@@ -298,10 +396,6 @@ export class POSProductsComponent {
     } else {
 
       this.defaultAlert = []
-
-      Object.keys(this.form.controls).forEach(key => {
-
-      })
 
       Object.keys(this.form.controls).forEach(key => {
         if (!this.form.get(key)?.valid) {

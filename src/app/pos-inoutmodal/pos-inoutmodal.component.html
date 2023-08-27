@@ -1,0 +1,30 @@
+<form [formGroup]="form">
+
+    <mat-card class="p-2">
+        <mat-card-header>
+            <mat-card-title>{{isStockin? "Stock In" : "Stock Out"}}</mat-card-title>
+            <mat-card-subtitle>User: {{currentUser.Name}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+
+            <h2>{{currentProduct.Name}}</h2>
+            <div class="row ">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput type="number" formControlName="Quantity" placeholder="Enter quantity">
+                </mat-form-field>
+
+            </div>
+
+
+
+
+
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button color="warn" mat-button mat-dialog-close>Cancel</button>
+            <button mat-button mat-dialog-close (click)="create()" cdkFocusInitial>{{isStockin? "Stock In" : "Stock Out"}}</button>
+        </mat-card-actions>
+    </mat-card>
+
+</form>

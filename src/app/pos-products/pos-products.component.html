@@ -11,10 +11,8 @@
     </div>
 </div>
 
-<div class="row mb-3">+
-    
-
-    <form [formGroup]="form">
+<div class="row mb-3">
+    <form [formGroup]="form" #formDirective="ngForm" >
         <mat-accordion class="example-headers-align">
             <mat-expansion-panel (click)="togglePanel(true)" [expanded]="panelOpenState">
                 <mat-expansion-panel-header>
@@ -146,14 +144,16 @@
 
                 <div class="row">
                     <!---image-->
-                    <img [src]="selectedFile?.name" width="120" height="120" alt="">
+                   <div class="col-3">
+                    <img [src]="imgurl" width="220" height="220" alt="" class="mb-2">
                     <input formControlName="image" (change)="onFileSelected($event)" #fileInput type="file">
                   
+                   </div>
                     <!---end of image-->
                 </div>
                 <mat-action-row align="start">
 
-                    <button mat-raised-button color="primary" (click)="create()">{{updating? 'Update Product': 'Add Product'}}</button>
+                    <button mat-raised-button type="submit" color="primary" (click)="create(formDirective)">{{updating? 'Update Product': 'Add Product'}}</button>
                 </mat-action-row>
 
             </mat-expansion-panel>
@@ -168,12 +168,15 @@
 
 <p>
     <mat-card>
-
+        <mat-card-actions>
+            <mat-paginator [pageSizeOptions]="[25,50,100]"></mat-paginator>
+        </mat-card-actions>
         <mat-card-content>
-            <table mat-table class=" table-responsive" [dataSource]="datasource" matSort>
+
+            <table mat-table class="table table-responsive table-hover" [dataSource]="datasource" matSort>
                 <ng-container matColumnDef="category">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
-                    <td mat-cell *matCellDef="let row">{{row.Category}} {{row.Name.Firstname}}</td>
+                    <td mat-cell *matCellDef="let row">{{row.Category}}</td>
                 </ng-container>
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -186,11 +189,11 @@
                 </ng-container>
                 <ng-container matColumnDef="cost">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost</th>
-                    <td mat-cell *matCellDef="let row">{{row.Cost}}</td>
+                    <td mat-cell *matCellDef="let row">{{row.Cost | number: '.2-2' }}/ {{row.Stocks.UnitofMeasurement == 'None'? "Pcs": row.Stocks.UnitofMeasurement }}</td>
                 </ng-container>
                 <ng-container matColumnDef="price">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
-                    <td mat-cell *matCellDef="let row">{{row.Price}}</td>
+                    <td mat-cell *matCellDef="let row">{{row.Price | number: '.2-2'}}/ {{row.Stocks.UnitofMeasurement == 'None'? "Pcs": row.Stocks.UnitofMeasurement }}</td>
                 </ng-container>
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
@@ -200,6 +203,13 @@
                     <th mat-header-cell *matHeaderCellDef>Actions</th>
                     <td mat-cell *matCellDef="let row">
                         <div class="example-flex-container">
+                            <button  mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>launch</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button (click)="editStock(row,true)" mat-menu-item>Stock In</button>
+                                <button (click)="editStock(row,false)" mat-menu-item>Stock Out</button>
+                            </mat-menu>
                             <button (click)="edit(row)" mat-icon-button>
                                 <mat-icon>edit</mat-icon>
                             </button>
@@ -214,8 +224,6 @@
             </table>
 
         </mat-card-content>
-        <mat-card-actions>
-            <mat-paginator [pageSizeOptions]="[10,25,50,100]"></mat-paginator>
-        </mat-card-actions>
+   
     </mat-card>
 </p>

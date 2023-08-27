@@ -10,6 +10,7 @@ import { POSTransactionComponent } from './pos-transaction/pos-transaction.compo
 import { POSGcashTransactionComponent } from './pos-gcash-transaction/pos-gcash-transaction.component';
 import { POSUserComponent } from './pos-user/pos-user.component';
 import { IsAdminGuard } from './shared/authguard.guard';
+import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     {
       path: 'products',canActivate: [IsAdminGuard]  ,component: POSProductsComponent
     },
+    { path: 'stockinout', canActivate:[IsAdminGuard], component: PosProductinoutComponent},
     {
       path: 'category',canActivate: [IsAdminGuard]  , component: POSCategoryComponent
     },

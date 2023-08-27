@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MongodbService, queryType } from '../shared/mongodb.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-pos-cashier',
@@ -12,9 +13,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class POSCashierComponent implements OnInit {
 
-  constructor(private http: HttpClient,private mdb: MongodbService){}
+  constructor(private auth:AuthService ,private http: HttpClient,private mdb: MongodbService){}
 
+  admin:boolean =true;
   ngOnInit(): void {
+    if(sessionStorage.getItem('role') == 'Cashier') this.admin =false;
 
     this.getData();
     this.loadCategories();
@@ -36,6 +39,9 @@ delete(data:any){
     this.table.renderRows();
   }
   
+}
+logout(){
+  this.auth.logout();
 }
   addData(data:any){
 

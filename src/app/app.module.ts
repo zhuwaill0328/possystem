@@ -54,6 +54,8 @@ import {HttpClientModule} from '@angular/common/http';
 import{ AlertModule} from 'ngx-bootstrap/alert';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
+import { PosInoutmodalComponent } from './pos-inoutmodal/pos-inoutmodal.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,9 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     POSCashierComponent,
     POSGcashTransactionComponent,
     POSUserComponent,
-    POSSidenavComponent
+    POSSidenavComponent,
+    PosProductinoutComponent,
+    PosInoutmodalComponent
   ],
   imports: [
     BrowserModule,

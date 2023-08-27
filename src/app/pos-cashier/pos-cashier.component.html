@@ -38,8 +38,8 @@
                         <mat-icon [matMenuTriggerFor]="account">person</mat-icon>
                         <mat-menu #account="matMenu" xPosition="before">
                             <button mat-menu-item >Acount</button>
-                            <button mat-menu-item routerLink="/home/dashboard">Back to Dashboard</button>
-                            <button mat-menu-item >Logout</button>
+                            <button *ngIf="admin" mat-menu-item routerLink="/home/dashboard">Back to Dashboard</button>
+                            <button mat-menu-item  (click)="logout()" >Logout</button>
                         </mat-menu>
                     </div>
                 </mat-toolbar>
