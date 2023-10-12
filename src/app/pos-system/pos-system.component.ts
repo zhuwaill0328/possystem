@@ -16,7 +16,11 @@ export class PosSystemComponent {
 
 
   get gcashRatesarray(){
-    return this.gcashRates.
+    return this.gcashRates.get('rates') as FormArray;
+  }
+
+  addGashrates(){
+    this.gcashRatesarray.push(this.buildEntity())
   }
 
 

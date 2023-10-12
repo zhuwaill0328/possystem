@@ -27,17 +27,11 @@ class posAuthGuard{
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
 
-      const islogin = this.auth.isLoggedIn()
+     
+      const user = this.auth.getCurrentUser()
 
-      if(islogin){
-
-        const user = this.auth.getCurrentUser()
-
-        if(user.role == "Standard") return false
+        if(user.role == "") return false
         else return true
-
-      }else  return false
- 
 
   }
 

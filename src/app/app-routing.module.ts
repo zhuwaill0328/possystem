@@ -39,7 +39,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'pos',canActivate: [PosAdminGuard]  , component: POSCashierComponent
+    path: 'pos',canActivate: [IsAdminGuard]  , component: POSCashierComponent
   },
   {
     component: POSLoginComponent,

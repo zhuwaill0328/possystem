@@ -1,64 +1,73 @@
-<form [formGroup]="gcashForm">
+<div class="container">
+    <form [formGroup]="gcashForm">
 
-    <div class="row">
-        <div class="col">
-    
-            <mat-button-toggle-group formControlName="TransactionType" name="fontStyle" aria-label="Font Style">
-                <mat-button-toggle value="Cash In">Cash-In</mat-button-toggle>
-                <mat-button-toggle value="Cash Out">Cash-Out</mat-button-toggle>
-              </mat-button-toggle-group>
-    
-        </div>
-    
-    
-    </div>
-    
-    <div formGroupName="Customer">
-        <div class="row">
+        <div class="row mb-2 mt-2">
             <div class="col">
         
-                <mat-form-field class="example-full-width">
-                    <mat-label>Customer Name</mat-label>
-                    <input matInput formControlName="Name" placeholder="Enter customer name">
-                </mat-form-field>
+                <mat-button-toggle-group formControlName="TransactionType" name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle value="Cash In">Cash-In</mat-button-toggle>
+                    <mat-button-toggle value="Cash Out">Cash-Out</mat-button-toggle>
+                  </mat-button-toggle-group>
         
             </div>
         
+        
         </div>
+        
+        <div formGroupName="Customer">
+            <div class="row">
+                <div class="col">
+            
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Customer Name</mat-label>
+                        <input matInput formControlName="Name" placeholder="Enter customer name">
+                    </mat-form-field>
+            
+                </div>
+            
+            </div>
+            <div class="row">
+                <div class="col">
+            
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Mobile Number</mat-label>
+                        <input matInput formControlName="Phone" placeholder="Enter customer gcash number">
+                    </mat-form-field>
+            
+                </div>
+            
+            </div>
+        </div>
+    
         <div class="row">
             <div class="col">
-        
+            
                 <mat-form-field class="example-full-width">
-                    <mat-label>Mobile Number</mat-label>
-                    <input matInput formControlName="Phone" placeholder="Enter customer gcash number">
+                    <mat-label>Reference Number</mat-label>
+                    <input matInput formControlName="ReferenceNumber" placeholder="Enter reference number">
                 </mat-form-field>
         
             </div>
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>Amount</mat-label>
+                    <input matInput formControlName="Amount" placeholder="Enter reference number">
+                </mat-form-field>
         
+            </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-        
-            <mat-form-field class="example-full-width">
-                <mat-label>Reference Number</mat-label>
-                <input matInput formControlName="ReferenceNumber" placeholder="Enter reference number">
-            </mat-form-field>
+        <div class="row mb-4 float-end">
+            <div class="col">
+                <button mat-button color="warn">Cancel</button>
+            </div>
+            <div class="col">
+                <button mat-raised-button color="primary">Proceed</button>
+            </div>
+            
+        </div>
     
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-        
-            <mat-form-field class="example-full-width">
-                <mat-label>Reference Number</mat-label>
-                <input matInput formControlName="ReferenceNumber" placeholder="Enter reference number">
-            </mat-form-field>
     
-        </div>
-    </div>
-
-
-
-</form>
+    
+    </form>
+</div>

@@ -8,6 +8,7 @@ import { AuthService } from '../shared/auth.service';
 import { environment } from 'src/environments/environment.development';
 import { MatDialog } from '@angular/material/dialog';
 import { PosPaymentModalComponent } from './pos-payment-modal/pos-payment-modal.component';
+import { PosGcashModalComponent } from './pos-gcash-modal/pos-gcash-modal.component';
 
 @Component({
   selector: 'app-pos-cashier',
@@ -50,7 +51,9 @@ export class POSCashierComponent implements OnInit {
     this.auth.logout();
   }
   addData(data: any, isadd: boolean = true) {
-
+    if(data.Stocks.Quantity <=0 ){
+      return;
+    }
     if (this.results.length > 0) {
       let index: any = this.results.indexOf(data);
       if (index !== -1) {
@@ -99,13 +102,17 @@ export class POSCashierComponent implements OnInit {
 
   async getData() {
 
+    const htmlbody= {
+      Quantity : { $gt : 0}
+    }
+
     this.http.get(this.mdb.getProductEndpoint(queryType.READ),
       { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
         this.products = [];
 
-        this.products = data.data;
+        this.products = data.data.filter((data: any) => data.Stocks.Quantity > 0);
 
-        this.filteredProduct = data.data;
+        this.filteredProduct =this.products
 
 
       })
@@ -116,6 +123,10 @@ export class POSCashierComponent implements OnInit {
 
     return environment.EndPoint + "uploads/img_" + row.Image;
 
+  }
+
+  geticons(file:any){
+    return environment.EndPoint + "uploads/" + file;
   }
   value = ""
   getTotalCost() {
@@ -147,6 +158,18 @@ export class POSCashierComponent implements OnInit {
 
   }
 
+  openGcash(){
+
+    let dialogref = this.dialog.open(PosGcashModalComponent,{
+      disableClose:true,
+      width: '90vw'
+
+    })
+
+    dialogref.afterClosed().subscribe(data=>{
+      alert(data)
+    })
+  }
 
 
   processPayment() {
