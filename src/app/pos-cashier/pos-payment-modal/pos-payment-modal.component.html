@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <h1 mat-dialog-title>Total: {{transaction.transaction.total}}</h1>
+    <form style="width: 100%;" [formGroup]="payment">
+    <div class="row">
+       
+            <mat-form-field >
+          
+                <input matInput style="width: 100%;" type="text" autocomplete="off" formControlName="total" value="0.00" [defaultValue]="0.00"  placeholder="0.00">
+              </mat-form-field>
+      
+
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="7" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="8" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="9" (click)="calculate($event)">
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="4" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="5" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="6" (click)="calculate($event)">
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="1" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="2" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="3" (click)="calculate($event)">
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="reset" value="clear" >
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="0" (click)="calculate($event)">
+        </div>
+        <div class="col-sm-4">
+            <input class="btn btn-secondary num-btn"  type="button" value="." (click)="calculate($event)">
+        </div>
+    </div>
+
+</form>
+<hr>
+
+<div class="row px-4">
+    <div class="col-sm-6">
+        <div class="row mx-1">
+            <button style="height: 60px;" mat-flat-button color="warn" mat-dialog-close>CANCEL</button>
+        </div>
+        
+    </div>
+
+    <div class="col-sm-6">
+       <div class="row mx-1">
+        <button  style="height: 60px;" (click)="acceptPayment()" mat-raised-button color="primary" >ACCEPT PAYMENT</button>
+       </div>
+    </div>
+
+</div>
+<div class="row px-4 mb-3">
+   
+</div>
+</div>

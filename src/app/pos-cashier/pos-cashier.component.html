@@ -1,3 +1,21 @@
+
+<div class="content">
+  <div class="toolbar" style="height: 10px !important;">
+      <mat-toolbar>
+          <div class="box">
+              <mat-icon><span><img src="gcash.png" width="30px" height="30px" alt=""></span></mat-icon>
+              <mat-icon [matMenuTriggerFor]="account">person</mat-icon>
+              <mat-menu #account="matMenu" xPosition="before">
+                  <button mat-menu-item >Acount</button>
+                  <button mat-menu-item (click)="logout()" >Logout</button>
+              </mat-menu>
+          </div>
+      </mat-toolbar>
+  </div>
+  <div class="main">
+      <router-outlet></router-outlet>
+  </div>
+</div>
 <mat-sidenav-container class="container-fluid main-body">
   <mat-sidenav class="sidenagivation" #sidebar mode="side" opened="">
     <section class="example-container">
@@ -62,7 +80,7 @@
       </div>
       <hr style="color: white;">
       <div class="row">
-        <button class="btn-payment" mat-raised-button color="accent">PAYMENT</button>
+        <button class="btn-payment mb-2" (click)="processPayment()" mat-raised-button color="accent">PAYMENT</button>
       </div>
     </section>
 
@@ -90,14 +108,7 @@
       </div>
       <div class="main container-fluid">
 
-        <div class="row mb-5">
-          <mat-chip-listbox class="example-chip" cdkDropList cdkDropListOrientation="horizontal">
-          <mat-chip-option selected  (selectionChange)="filterProducts('')" >Most Buy</mat-chip-option>
-          <mat-chip-option  (selectionChange)="filterProducts(chip.Name)" *ngFor="let chip of categories"  >
-            {{chip.Name}}
-          </mat-chip-option>
-        </mat-chip-listbox>
-        </div>
+      
 
         <div class="row">
           <div class="col">
@@ -119,7 +130,7 @@
                           <mat-icon>add</mat-icon>
                         </button></div>
                       <div class="col price p-1 ">
-                        <h1 class="text-danger"><strong>P{{row.Price | number: '2.2'}}</strong></h1>
+                        <h3 class="text-danger"><strong>P{{row.Price | number: '2.2'}}</strong></h3>
                       </div>
                     </div>
 
@@ -127,6 +138,15 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="col-2">
+            <mat-chip-listbox class="mat-mdc-chip-set-stacked" cdkDropList cdkDropListOrientation="horizontal">
+              <mat-chip-option selected  (selectionChange)="filterProducts('')" >Most Buy</mat-chip-option>
+              <mat-chip-option  (selectionChange)="filterProducts(chip.Name)" *ngFor="let chip of categories"  >
+                {{chip.Name}}
+              </mat-chip-option>
+            </mat-chip-listbox>
           </div>
 
 

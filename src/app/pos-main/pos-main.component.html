@@ -1,5 +1,5 @@
 <mat-sidenav-container class="container-fluid main-body">
-    <mat-sidenav class="sidenagivation" #sidebar mode="side" opened="">
+    <mat-sidenav class="sidenagivation" #sidebar [mode]="resohigh? 'side' : 'over'" opened="">
     <app-pos-sidenav></app-pos-sidenav>
     </mat-sidenav>
     <mat-sidenav-content>

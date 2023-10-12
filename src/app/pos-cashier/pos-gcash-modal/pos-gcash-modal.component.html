@@ -1,0 +1,64 @@
+<form [formGroup]="gcashForm">
+
+    <div class="row">
+        <div class="col">
+    
+            <mat-button-toggle-group formControlName="TransactionType" name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle value="Cash In">Cash-In</mat-button-toggle>
+                <mat-button-toggle value="Cash Out">Cash-Out</mat-button-toggle>
+              </mat-button-toggle-group>
+    
+        </div>
+    
+    
+    </div>
+    
+    <div formGroupName="Customer">
+        <div class="row">
+            <div class="col">
+        
+                <mat-form-field class="example-full-width">
+                    <mat-label>Customer Name</mat-label>
+                    <input matInput formControlName="Name" placeholder="Enter customer name">
+                </mat-form-field>
+        
+            </div>
+        
+        </div>
+        <div class="row">
+            <div class="col">
+        
+                <mat-form-field class="example-full-width">
+                    <mat-label>Mobile Number</mat-label>
+                    <input matInput formControlName="Phone" placeholder="Enter customer gcash number">
+                </mat-form-field>
+        
+            </div>
+        
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+        
+            <mat-form-field class="example-full-width">
+                <mat-label>Reference Number</mat-label>
+                <input matInput formControlName="ReferenceNumber" placeholder="Enter reference number">
+            </mat-form-field>
+    
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+        
+            <mat-form-field class="example-full-width">
+                <mat-label>Reference Number</mat-label>
+                <input matInput formControlName="ReferenceNumber" placeholder="Enter reference number">
+            </mat-form-field>
+    
+        </div>
+    </div>
+
+
+
+</form>

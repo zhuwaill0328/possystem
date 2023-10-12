@@ -11,10 +11,11 @@ export class POSMainComponent implements OnInit {
   constructor(private auth: AuthService){}
 
   openSidenav:boolean =false;
-
+  resohigh: boolean =true;
   ngOnInit(): void {
     if(sessionStorage.getItem('role') == 'Cashier') this.isAdmin =false;
     else if(sessionStorage.getItem('role') == 'Standard') this.isStandard =true;
+
 
   }
 

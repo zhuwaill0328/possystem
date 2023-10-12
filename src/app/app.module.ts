@@ -57,6 +57,9 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
 import { PosInoutmodalComponent } from './pos-inoutmodal/pos-inoutmodal.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { PosPaymentModalComponent } from './pos-cashier/pos-payment-modal/pos-payment-modal.component';
+import { PosGcashModalComponent } from './pos-cashier/pos-gcash-modal/pos-gcash-modal.component';
+import { PosSystemComponent } from './pos-system/pos-system.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +76,10 @@ import { DialogComponent } from './dialog/dialog.component';
     POSSidenavComponent,
     PosProductinoutComponent,
     PosInoutmodalComponent,
-    DialogComponent
+    DialogComponent,
+    PosPaymentModalComponent,
+    PosGcashModalComponent,
+    PosSystemComponent
   ],
   imports: [
     BrowserModule,

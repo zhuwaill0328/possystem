@@ -6,6 +6,8 @@ import { MongodbService, queryType } from '../shared/mongodb.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../shared/auth.service';
 import { environment } from 'src/environments/environment.development';
+import { MatDialog } from '@angular/material/dialog';
+import { PosPaymentModalComponent } from './pos-payment-modal/pos-payment-modal.component';
 
 @Component({
   selector: 'app-pos-cashier',
@@ -14,13 +16,13 @@ import { environment } from 'src/environments/environment.development';
 })
 export class POSCashierComponent implements OnInit {
 
-  constructor(private auth:AuthService ,private http: HttpClient,private mdb: MongodbService){}
+  constructor(private auth: AuthService, private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog) { }
 
-  admin:boolean =true;
+  admin: boolean = true;
   ngOnInit(): void {
-    
+
     this.results = [];
-    if(sessionStorage.getItem('role') == 'Cashier') this.admin =false;
+    if (sessionStorage.getItem('role') == 'Cashier') this.admin = false;
 
     this.getData();
     this.loadCategories();
@@ -31,118 +33,167 @@ export class POSCashierComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   datasource: MatTableDataSource<any> = new MatTableDataSource<any>;
-  results:any = []
-  products:any =[]
-  filteredProduct:any = []
-  displayedColumns: any = ['quantity','name','subtotal' ,'actions'];
+  results: any = []
+  products: any = []
+  filteredProduct: any = []
+  displayedColumns: any = ['quantity', 'name', 'subtotal', 'actions'];
 
-delete(data:any){
-  const index :number = this.results.indexOf(data);
-  if(index !== -1){
-    this.results.splice(index, 1)
-    this.table.renderRows();
+  delete(data: any) {
+    const index: number = this.results.indexOf(data);
+    if (index !== -1) {
+      this.results.splice(index, 1)
+      this.table.renderRows();
+    }
+
   }
-  
-}
-logout(){
-  this.auth.logout();
-}
-  addData(data:any , isadd:boolean =true){
+  logout() {
+    this.auth.logout();
+  }
+  addData(data: any, isadd: boolean = true) {
 
-    if(this.results.length > 0){
-      let index :any = this.results.indexOf(data);
-      if(index !== -1){
+    if (this.results.length > 0) {
+      let index: any = this.results.indexOf(data);
+      if (index !== -1) {
 
-        if(isadd == true){
+        if (isadd == true) {
 
-          if(data.Qty == data.Stocks.Quantity) return;
+          if (data.Stocks.Quantity == 0) return;
+          data.Stocks.Quantity--;
           data.Qty++;
-        }else{
-
-          if(data.Qty == 1){
+        } else {
+          data.Stocks.Quantity++
+          if (data.Qty == 1) {
             this.delete(data);
             return;
           }
           data.Qty--;
         }
-       
-       
-    
-      }else{
+
+
+
+      } else {
+        data.Stocks.Quantity--;
         data.Qty = 1;
         this.results.push(data);
       }
 
-    }else{
+    } else {
+      data.Stocks.Quantity--;
       data.Qty = 1;
       this.results.push(data);
     }
     this.table.renderRows();
   }
 
-  categories:any = []
+  categories: any = []
 
   loadCategories() {
 
     this.categories = [];
     this.http.get(this.mdb.getCategoryEndPoint(queryType.READ), { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
-      this.categories = data.data;
-      console.log(this.categories)
-
+      this.categories = data.data
     })
 
   }
 
   async getData() {
 
-    this.http.get(this.mdb.getProductEndpoint(queryType.READ), 
-    { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
-      this.products = [];
-  
-      this.products = data.data;
+    this.http.get(this.mdb.getProductEndpoint(queryType.READ),
+      { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
+        this.products = [];
 
-      this.filteredProduct = data.data;
-      
+        this.products = data.data;
 
-    })
+        this.filteredProduct = data.data;
+
+
+      })
 
   }
 
-  getImage(row:any){
+  getImage(row: any) {
 
     return environment.EndPoint + "uploads/img_" + row.Image;
-    
+
   }
-value = ""
+  value = ""
   getTotalCost() {
     let count = 0;
 
-    const data:any [] = this.results;
+    const data: any[] = this.results;
 
-    data.forEach((info:any)=>{
+    data.forEach((info: any) => {
 
-        count+= (info.Qty * info.Price)
+      count += (info.Qty * info.Price)
     })
 
     return count;
   }
 
 
-  filterProducts(value:any){
+  filterProducts(value: any) {
 
- this.filteredProduct =   this.products.filter((data:any) => data.Category.toLowerCase().includes(value.toLowerCase()));
-    
+    this.filteredProduct = this.products.filter((data: any) => data.Category.toLowerCase().includes(value.toLowerCase()));
+
 
   }
 
-  searchProduct(control:any){
+  searchProduct(control: any) {
     const filter = control.target.value;
-    this.filteredProduct =   this.products.filter((data:any) => 
-    data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter );
-    
+    this.filteredProduct = this.products.filter((data: any) =>
+      data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter);
+
 
   }
+
+
+
+  processPayment() {
+
+    if(this.results.length > 0){
+
+      let dialogref = this.dialog.open(PosPaymentModalComponent, {
+        disableClose: true,
+        data: {
+          cart: this.results,
+          transaction: {
+            total: this.getTotalCost()
+          },
+          customer: "Rhomnel Saguinsin"
+        }
+      })
+  
+      dialogref.afterClosed().subscribe((result: any) => {
+        
+        if (result.submitFlag) {
+  
+       
+          while(this.results.length > 0){
+              this.results.splice(0,1)
+          }
+          this.results = []
+
+          
+          this.table.renderRows();
+          
+  
+        }
+  
+      })
+
+
+    }
+
+
+
+   
+
+
+  }
+
+
+
 
 
 

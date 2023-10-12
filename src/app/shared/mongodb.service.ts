@@ -43,6 +43,22 @@ export class MongodbService {
     }
   }
 
+  getTransactionEndPoint(action: queryType){
+
+    switch(action){
+      case queryType.INSERT:
+        return environment.EndPoint + "transaction/create";
+        break;
+      case queryType.UPDATE:
+          return environment.EndPoint + "transaction/update";
+          break;
+      case queryType.READ:
+      default:
+        return environment.EndPoint + "transaction/get";
+
+  }
+  }
+
   getUserEndPoint(action: queryType){
 
     switch(action){

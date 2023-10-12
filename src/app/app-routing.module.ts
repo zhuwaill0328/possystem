@@ -9,7 +9,7 @@ import { POSCashierComponent } from './pos-cashier/pos-cashier.component';
 import { POSTransactionComponent } from './pos-transaction/pos-transaction.component';
 import { POSGcashTransactionComponent } from './pos-gcash-transaction/pos-gcash-transaction.component';
 import { POSUserComponent } from './pos-user/pos-user.component';
-import { IsAdminGuard } from './shared/authguard.guard';
+import { IsAdminGuard, PosAdminGuard } from './shared/authguard.guard';
 import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
 
 const routes: Routes = [
@@ -39,7 +39,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'pos',canActivate: [IsAdminGuard]  , component: POSCashierComponent
+    path: 'pos',canActivate: [PosAdminGuard]  , component: POSCashierComponent
   },
   {
     component: POSLoginComponent,
