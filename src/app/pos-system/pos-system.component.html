@@ -1,1 +1,70 @@
-<p>pos-system works!</p>
+<div class="container-fluid">
+    <button (click)="updateSystemInfo()" mat-raised-button>
+        Update Company Profile
+      </button>
+    <form [formGroup]="gcashRates">
+  <mat-tab-group>
+    <mat-tab label="Company Info">
+      <div class="container">
+        <div class="row">
+            <div class="col">
+              <mat-form-field class="example-full-width">
+                <mat-label>Company Name</mat-label>
+                <input
+                  matInput
+                  formControlName="company"
+                  placeholder="Enter Company Name"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Gcash Rates">
+      <div class="container">
+        <h1>Rates</h1>
+          <div class="mt-3" formArrayName="rates">
+            <div
+              *ngFor="let rates of gcashRatesarray.controls; let i = index"
+              class="row"
+            >
+              <div class="row" formGroupName="{{ i }}">
+                <div class="col">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Amount</mat-label>
+                    <input
+                      type="number"
+                      matInput
+                      formControlName="amount"
+                      placeholder="Enter Rate"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Fee</mat-label>
+                    <input
+                      type="number"
+                      matInput
+                      formControlName="fee"
+                      placeholder="Enter Fee"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-icon (click)="removeGcashRates(i)">delete</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button mat-raised-button color="primary" (click)="addGashrates()">
+            Add Rates
+          </button>
+      
+      </div>
+    </mat-tab>
+   <!-- <mat-tab label="Third"> </mat-tab>-->
+  </mat-tab-group>
+</form>
+</div>

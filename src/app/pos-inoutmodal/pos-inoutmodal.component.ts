@@ -17,6 +17,7 @@ export class PosInoutmodalComponent implements OnInit {
   currentProduct: any;
   currentUser: any = this.auth.getCurrentUser();
   isStockin: boolean = false;
+  isConsume: boolean =false;
 
   form = new FormGroup({
     Id: new FormControl('', Validators.required),
@@ -29,6 +30,7 @@ export class PosInoutmodalComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.data.Type == 'Stock In') this.isStockin = true;
+    else if(this.data.Type == 'Consume') this.isConsume = true;
     this.currentProduct = this.data;
     this.loadData();
    
@@ -61,7 +63,7 @@ export class PosInoutmodalComponent implements OnInit {
             Name: this.form.value.Product,
             Category: this.form.value.Category
           },
-          Type: this.isStockin ? "Stock In" : "Stock Out",
+          Type: this.isStockin ? "Stock In" : this.isConsume? 'Consume': "Stock Out",
           CurrentQuantity: this.form.value.CurrentQuantity,
           Quantity: this.form.value.Quantity,
           User: this.currentUser

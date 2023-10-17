@@ -252,6 +252,7 @@
                             <mat-menu #menu="matMenu">
                                 <button (click)="editStock(row,true)" mat-menu-item>Stock In</button>
                                 <button (click)="editStock(row,false)" mat-menu-item>Stock Out</button>
+                                <button (click)="editStock(row,false,'Consume')" mat-menu-item>Consume</button>
                             </mat-menu>
                             <button matTooltip="Edit product" (click)="edit(row)" mat-icon-button>
                                 <mat-icon>edit</mat-icon>

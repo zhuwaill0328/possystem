@@ -1,18 +1,7 @@
 <div class="container">
+    <h1 class="mt-2"><strong>Gcash Transaction - {{transactionType? transactionType == 3? 'CASH-IN' : 'CASH-OUT' : ''}}</strong></h1>
     <form [formGroup]="gcashForm">
 
-        <div class="row mb-2 mt-2">
-            <div class="col">
-        
-                <mat-button-toggle-group formControlName="TransactionType" name="fontStyle" aria-label="Font Style">
-                    <mat-button-toggle value="Cash In">Cash-In</mat-button-toggle>
-                    <mat-button-toggle value="Cash Out">Cash-Out</mat-button-toggle>
-                  </mat-button-toggle-group>
-        
-            </div>
-        
-        
-        </div>
         
         <div formGroupName="Customer">
             <div class="row">
@@ -24,9 +13,6 @@
                     </mat-form-field>
             
                 </div>
-            
-            </div>
-            <div class="row">
                 <div class="col">
             
                     <mat-form-field class="example-full-width">
@@ -36,6 +22,47 @@
             
                 </div>
             
+            
+            </div>
+            
+        </div>
+
+        <div class="row">
+            
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Choose an option</mat-label>
+                    <mat-select [value]="getCurrentUserId()"  (valueChange)="userValueChange($event)">
+                      <mat-option  *ngFor="let user of users;let i = index" [value]="user">{{user.Name.Firstname}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="userVisible" formGroupName="User">
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>User</mat-label>
+                    <input readonly  matInput formControlName="Name" >
+                </mat-form-field>
+        
+            </div>
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>User Gcash Number</mat-label>
+                    <input readonly matInput formControlName="Phone" >
+                </mat-form-field>
+        
+            </div>
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>Role</mat-label>
+                    <input  matInput formControlName="Role" >
+                </mat-form-field>
+        
             </div>
         </div>
     
@@ -52,17 +79,25 @@
             
                 <mat-form-field class="example-full-width">
                     <mat-label>Amount</mat-label>
-                    <input matInput formControlName="Amount" placeholder="Enter reference number">
+                    <input (keyup)="changeFee($event)" type="number" matInput formControlName="Amount" placeholder="Enter Amount">
+                </mat-form-field>
+        
+            </div>
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>Transaction Fee</mat-label>
+                    <input  type="number" matInput formControlName="TransactionFee" placeholder="Enter Amount">
                 </mat-form-field>
         
             </div>
         </div>
         <div class="row mb-4 float-end">
             <div class="col">
-                <button mat-button color="warn">Cancel</button>
+                <button mat-button color="warn" mat-dialog-close >Cancel</button>
             </div>
             <div class="col">
-                <button mat-raised-button color="primary">Proceed</button>
+                <button mat-raised-button color="primary" mat-dialog-close>Proceed</button>
             </div>
             
         </div>

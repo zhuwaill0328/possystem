@@ -2,7 +2,7 @@
 
     <mat-card class="p-2">
         <mat-card-header>
-            <mat-card-title>{{isStockin? "Stock In" : "Stock Out"}}</mat-card-title>
+            <mat-card-title>{{isStockin? "Stock In" : isConsume? 'Family Consume' : "Stock Out"}}</mat-card-title>
             <mat-card-subtitle>User: {{currentUser.Name}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
@@ -27,7 +27,7 @@
         </mat-card-content>
         <mat-card-actions align="end">
             <button color="warn" mat-button mat-dialog-close>Cancel</button>
-            <button mat-button mat-dialog-close (click)="create()" cdkFocusInitial>{{isStockin? "Stock In" : "Stock Out"}}</button>
+            <button mat-button mat-dialog-close (click)="create()" cdkFocusInitial>{{isStockin? "Stock In" : isConsume? 'Consume':  "Stock Out"}}</button>
         </mat-card-actions>
     </mat-card>
 

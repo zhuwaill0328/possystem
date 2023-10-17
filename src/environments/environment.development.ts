@@ -1,7 +1,7 @@
 export const environment = {
 
-    EndPoint : "http://192.168.254.101:8080/",
-    logourl: "http://192.168.254.101:8080/uploads/logo.png",
+    EndPoint : "http://10.20.31.130:8080/",
+    logourl: "http://10.20.31.130:8080/uploads/logo.png",
 
 
 };

@@ -79,6 +79,13 @@ export class POSSidenavComponent implements OnInit {
     label: 'Users',
     allowed: this.isAdmin
   }
+  ,
+  {
+    routerLink:'system',
+    icon: 'settings',
+    label: 'System',
+    allowed: this.isAdmin
+  }
 
 
 ]

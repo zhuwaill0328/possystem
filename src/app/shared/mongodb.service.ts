@@ -43,6 +43,19 @@ export class MongodbService {
     }
   }
 
+  getSystemEndPoint(action: queryType){
+    switch(action){
+      
+      case queryType.UPDATE:
+          return environment.EndPoint + "system/update";
+          break;
+      case queryType.READ:
+      default:
+        return environment.EndPoint + "system/get";
+
+  }
+  }
+
   getTransactionEndPoint(action: queryType){
 
     switch(action){

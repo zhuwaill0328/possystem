@@ -10,6 +10,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { PosPaymentModalComponent } from './pos-payment-modal/pos-payment-modal.component';
 import { PosGcashModalComponent } from './pos-gcash-modal/pos-gcash-modal.component';
 
+
+enum PaymentType{
+  CASH = 0,
+  GCASH = 1,
+  CREDIT = 2,
+  CASHIN = 3,
+  CASHOUT = 4
+}
+
 @Component({
   selector: 'app-pos-cashier',
   templateUrl: './pos-cashier.component.html',
@@ -102,10 +111,7 @@ export class POSCashierComponent implements OnInit {
 
   async getData() {
 
-    const htmlbody= {
-      Quantity : { $gt : 0}
-    }
-
+   
     this.http.get(this.mdb.getProductEndpoint(queryType.READ),
       { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
         this.products = [];
@@ -158,21 +164,24 @@ export class POSCashierComponent implements OnInit {
 
   }
 
-  openGcash(){
+  openGcash(type: PaymentType = PaymentType.CASHIN ){
 
     let dialogref = this.dialog.open(PosGcashModalComponent,{
       disableClose:true,
-      width: '90vw'
+      width: '90vw',
+      data: {
+        type: type
+      }
 
     })
 
     dialogref.afterClosed().subscribe(data=>{
-      alert(data)
+      
     })
   }
 
 
-  processPayment() {
+  processPayment(paymentType: PaymentType) {
 
     if(this.results.length > 0){
 

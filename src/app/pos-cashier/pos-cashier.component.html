@@ -56,15 +56,22 @@
     <section class="container cart-footer">
       <div class="row">
         <div class="col-6 text-white mt-3">
-          <h1>Total:</h1>
+          <p>Total:</p>
         </div>
         <div class="col-6 text-warning mt-3">
-          <h1><strong>P {{ getTotalCost() | number: '2.2' }}</strong></h1>
+          <p style="font-size: 1.2rem;" class="float-end"><strong>P {{ getTotalCost() | number: '2.2' }}</strong></p>
         </div>
+        <hr>
       </div>
-      <hr style="color: white;">
-      <div class="row">
-        <button class="btn-payment mb-2" (click)="processPayment()" mat-raised-button color="accent">PAYMENT</button>
+
+      <div class="row ">
+        <button class="btn-payment mb-2 mx-1"  mat-raised-button color="primary">CUSTOMER</button>
+    
+        <button class="btn-payment   mb-2 mx-1" (click)="processPayment(1)" mat-raised-button color="primary">GCASH PAYMENT</button>
+    
+        <button class="btn-payment mb-2 mx-1" (click)="processPayment(2)" mat-raised-button color="primary">CLIENT CREDIT</button>
+    
+        <button class="btn-payment mb-2 mx-1" (click)="processPayment(0)" mat-raised-button color="accent">CASH PAYMENT</button>
       </div>
     </section>
 
@@ -75,14 +82,15 @@
         <mat-toolbar>
           <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 30%;">
          
-            <input (input)="searchProduct($event)" matInput placeholder="Search">
+            <input autofocus (input)="searchProduct($event)" matInput placeholder="Search">
             <mat-icon matSuffix>search</mat-icon>
            
           </mat-form-field>
           
           <div class="box">
-            <mat-icon>group</mat-icon>
-           <button mat-button (click)="openGcash()" class="mb-3"> <span><img src="{{geticons('gcash.png')}}" width="30" height="30" alt=""></span></button>
+            
+           <button mat-button (click)="openGcash(3)" class="mb-3 mx-1"> GCASH IN</button>
+           <button mat-button (click)="openGcash(4)" class="mb-3 mx-1"> GCASH OUT</button>
             <mat-icon [matMenuTriggerFor]="account">menu</mat-icon>
             <mat-menu #account="matMenu" xPosition="before">
               <button mat-menu-item>Acount</button>
@@ -103,20 +111,20 @@
                 <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="20%" *ngFor="let row of filteredProduct">
                   <mat-card class="mat-elevation-z4">
                     <mat-card-header>
-                      <p><strong>{{row.Name}}</strong></p>
+                      <strong>{{row.Name}}</strong>
                     </mat-card-header>
                     <mat-card-content class="mt-2 mb-3" fxLayoutAlign="center">
                       <img height="120" width="120" mat-card-image src="{{getImage(row)}}" />
                     </mat-card-content>
 
-                    <div class="row px-1 actions">
-                      <div class="col  mt-1">
+                    <div class="row px-1 mb-1 actions">
+                      <div class="col">
                         
                         <button class="mx-2" matTooltip="Add to cart" (click)="addData(row)" mat-mini-fab color="primary">
                           <mat-icon>add</mat-icon>
                         </button></div>
-                      <div class="col price p-1 ">
-                        <h3 class="text-danger"><strong>P{{row.Price | number: '2.2'}}</strong></h3>
+                      <div class="col price ">
+                        <p><strong>P{{row.Price | number: '2.2'}}</strong></p>
                       </div>
                     </div>
 

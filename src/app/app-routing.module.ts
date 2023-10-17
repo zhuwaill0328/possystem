@@ -11,6 +11,7 @@ import { POSGcashTransactionComponent } from './pos-gcash-transaction/pos-gcash-
 import { POSUserComponent } from './pos-user/pos-user.component';
 import { IsAdminGuard, PosAdminGuard } from './shared/authguard.guard';
 import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
+import { PosSystemComponent } from './pos-system/pos-system.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,9 @@ const routes: Routes = [
     },
     {
       path: 'users',canActivate: [IsAdminGuard]  , component: POSUserComponent
+    },
+    {
+      path: 'system',canActivate: [IsAdminGuard]  , component: PosSystemComponent
     },
 
     ]

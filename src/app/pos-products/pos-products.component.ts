@@ -192,9 +192,9 @@ export class POSProductsComponent implements OnInit {
     this.datatableSettings();
   }
 
-  editStock(row: any, isadd: boolean) {
+  editStock(row: any, isadd: boolean , consume: any = null) {
     if (isadd) row.Type = "Stock In";
-    else row.Type = "Stock out";
+    else row.Type = consume? consume : "Stock out";
 
     let dialogRef = this.dialog.open(PosInoutmodalComponent, {
       width: '20vw',

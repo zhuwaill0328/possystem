@@ -59,6 +59,7 @@ export class POSLoginComponent implements OnInit {
           sessionStorage.setItem('user_id',result.data._id);
           sessionStorage.setItem('user',result.data.Name.Firstname + " " +  result.data.Name.Lastname);
           sessionStorage.setItem('role', result.data.Role);
+          sessionStorage.setItem('uname', result.data.Name.Firstname)
           this.router.navigate(['/home/dashboard']);
           
         }else{

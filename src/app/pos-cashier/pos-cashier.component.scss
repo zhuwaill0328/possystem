@@ -1,7 +1,6 @@
 mat-sidenav{
     background-color: gainsboro;
     width: 450px;
-    height: 100%;
 }
 mat-sidenav-container{
     width: 100%;
@@ -19,29 +18,29 @@ mat-sidenav-container{
   }
 
 .example-container {
-    height: 75%;
+    height: 80%;
     width: 100%;
     max-width: 100%;
     overflow: auto;
   }
 
 td{
-   height: 60px !important;
+   height: 40px !important;
 
 }
 
 
 .btn-payment{
-    font-size: 40px;
-    height: 70px;
-    width: 80%;
+    font-size: 13px;
+    height: 50px;
+    width: 100px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .cart-footer{
 
-    height: 25%;
+    height: 20%;
     background-color: #0f172a !important;
 }
 
@@ -60,8 +59,8 @@ td{
 .menu-item{
     display: block;
     width: 100%;
-    height: 60px;
-    font-size: 18px;
+    height: 40px;
+    font-size: 12px;
     font-weight: bold;
 }
 .productlists{
