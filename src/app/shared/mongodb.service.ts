@@ -10,7 +10,8 @@ import { environment } from 'src/environments/environment.development';
   UPDATE = 1,
   DELETE = 2,
   READ = 4,
-  STOCK = 5
+  STOCK = 5,
+  PRODUCTBULK=6,
     
 }
 
@@ -114,6 +115,9 @@ export class MongodbService {
       case queryType.READ:
         return environment.EndPoint + "product/get";
         break;
+      case queryType.PRODUCTBULK:
+          return environment.EndPoint + "product/bulkupdates";
+          break;
       default:
         return environment.EndPoint + "product/get";
 

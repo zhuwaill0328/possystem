@@ -79,7 +79,7 @@
   <mat-sidenav-content>
     <div class="content">
       <div class="toolbar">
-        <mat-toolbar>
+        <mat-toolbar class="stickyHeader">
           <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 30%;">
          
             <input autofocus (input)="searchProduct($event)" matInput placeholder="Search">
@@ -89,9 +89,9 @@
           
           <div class="box">
             
-           <button mat-button (click)="openGcash(3)" class="mb-3 mx-1"> GCASH IN</button>
-           <button mat-button (click)="openGcash(4)" class="mb-3 mx-1"> GCASH OUT</button>
-            <mat-icon [matMenuTriggerFor]="account">menu</mat-icon>
+           <button mat-flat-button color="primary" (click)="openGcash(3)" class="mb-3 mx-1 "> GCASH IN</button>
+           <button mat-flat-button color="warn" (click)="openGcash(4)" class="mb-3 mx-1 "> GCASH OUT</button>
+            <mat-icon class="text-white" [matMenuTriggerFor]="account">menu</mat-icon>
             <mat-menu #account="matMenu" xPosition="before">
               <button mat-menu-item>Acount</button>
               <button *ngIf="admin" mat-menu-item routerLink="/home/dashboard">Back to Dashboard</button>

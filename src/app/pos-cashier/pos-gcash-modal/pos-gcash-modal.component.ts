@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
@@ -10,12 +10,12 @@ import { PosPaymentModalComponent } from '../pos-payment-modal/pos-payment-modal
   templateUrl: './pos-gcash-modal.component.html',
   styleUrls: ['./pos-gcash-modal.component.scss']
 })
-export class PosGcashModalComponent {
+export class PosGcashModalComponent implements OnInit {
 
   selectedUser:any
   userVisible: boolean =false
   transactionType: any
-
+  
 
   constructor(private http:HttpClient,
     private mdb: MongodbService, private fb:FormBuilder,
@@ -23,15 +23,20 @@ export class PosGcashModalComponent {
      @Inject(MAT_DIALOG_DATA) public data: any
     ){
       this.getUsers()
-      this.getGcashRates()
+      
       this.transactionType = this.data.type
+      
   }
+  ngOnInit(): void {
+    this.getGcashRates()
+  }
+
 
   users:any = []
   gcashForm = new FormGroup({
     Customer: new FormGroup({
       Name: new FormControl('',Validators.required),
-      Phone: new FormControl('',Validators.required)
+      Phone: new FormControl('',[Validators.required,Validators.minLength(11),Validators.maxLength(11)])
     }),
     User: new FormGroup({
       Name: new FormControl('',Validators.required),
@@ -57,6 +62,7 @@ export class PosGcashModalComponent {
   }
 
   userValueChange(event:any){
+
     this.selectedUser = event
     this.userVisible =true
     this.UserControl.controls['Name'].patchValue(this.selectedUser.Name.Firstname + ' ' + this.selectedUser.Name.Lastname)
@@ -69,6 +75,7 @@ export class PosGcashModalComponent {
     this.http.get(this.mdb.getUserEndPoint(queryType.READ), { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
      this.users = data.data
+     this.userValueChange(this.getCurrentUserId())
 
     })
 
@@ -92,11 +99,20 @@ export class PosGcashModalComponent {
 
   }
 
-  getCurrentUserId(){
+  getcurrentUser(User:any){
+    const index = this.users.indexOf(User)
 
+    return this.users[index]
+
+  }
+
+  getCurrentUserId(){
+   
     for(var user of this.users){
+      
       if(user._id == sessionStorage.getItem('user_id') ){
-         this.userValueChange(user)
+
+       
         return user
     }
     }
@@ -109,20 +125,10 @@ export class PosGcashModalComponent {
 
     this.http.get(this.mdb.getSystemEndPoint(queryType.READ), { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
-    const rate = data.data
-      this.rates=[]
-    if(rate.length > 0){
-      let sys = rate[0]
-
-   
-      for(var x of sys.GcashRates){
-         this.rates.push(x)
-      }
-     
-
-    }
-
-    })
+  
+      console.log(data.data )
+  
+      })
 
   }
 

@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment.development';
 import { MatDialog } from '@angular/material/dialog';
 import { PosPaymentModalComponent } from './pos-payment-modal/pos-payment-modal.component';
 import { PosGcashModalComponent } from './pos-gcash-modal/pos-gcash-modal.component';
-
+import Swal from 'sweetalert2';
 
 enum PaymentType{
   CASH = 0,
@@ -181,7 +181,7 @@ export class POSCashierComponent implements OnInit {
   }
 
 
-  processPayment(paymentType: PaymentType) {
+  processPayment(paymentType: PaymentType,Customer: any = null) {
 
     if(this.results.length > 0){
 
@@ -192,7 +192,7 @@ export class POSCashierComponent implements OnInit {
           transaction: {
             total: this.getTotalCost()
           },
-          customer: "Rhomnel Saguinsin"
+          customer: Customer?.Name? Customer.Name : 'Walk-in'
         }
       })
   
@@ -200,7 +200,7 @@ export class POSCashierComponent implements OnInit {
         
         if (result.submitFlag) {
   
-       
+          
           while(this.results.length > 0){
               this.results.splice(0,1)
           }
@@ -208,8 +208,13 @@ export class POSCashierComponent implements OnInit {
 
           
           this.table.renderRows();
+          this.getTotalCost()
           
-  
+          Swal.fire({
+            title: parseFloat(result.changes).toFixed(2),
+            text: "Changed",
+            confirmButtonText: "New Transaction"
+          })
         }
   
       })

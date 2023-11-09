@@ -32,8 +32,8 @@
             <div class="col">
                 <mat-form-field>
                     <mat-label>Choose an option</mat-label>
-                    <mat-select [value]="getCurrentUserId()"  (valueChange)="userValueChange($event)">
-                      <mat-option  *ngFor="let user of users;let i = index" [value]="user">{{user.Name.Firstname}}</mat-option>
+                    <mat-select [value]="getCurrentUserId()"   (valueChange)="userValueChange($event)">
+                      <mat-option   *ngFor="let user of users;let i = index" [value]="user">{{user.Name.Firstname}}</mat-option>
                     </mat-select>
                   </mat-form-field>
             </div>
@@ -97,7 +97,7 @@
                 <button mat-button color="warn" mat-dialog-close >Cancel</button>
             </div>
             <div class="col">
-                <button mat-raised-button color="primary" mat-dialog-close>Proceed</button>
+                <button mat-raised-button color="primary">Proceed</button>
             </div>
             
         </div>

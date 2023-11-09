@@ -85,6 +85,11 @@ mat-sidenav-content{
     }
 }
 
+.stickyHeader{
+    background-color: #0f172a !important;
+    position: sticky !important;
+}
+
 mat-toolbar{
     mat-icon{
         margin-left: 15px;

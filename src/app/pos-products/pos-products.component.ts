@@ -34,7 +34,7 @@ export class POSProductsComponent implements OnInit {
   form = new FormGroup({
     category: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
-    quantity: new FormControl(0, Validators.min(1)),
+    quantity: new FormControl(0, Validators.min(0)),
     soldby: new FormControl('Quantity', Validators.required),
     weight: new FormControl('0', Validators.required),
     threshold: new FormControl('0', Validators.required),
