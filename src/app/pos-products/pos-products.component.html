@@ -14,7 +14,7 @@
         </div>
     </div>
     
-    <div class="row mb-3">
+    <div class=" mb-3">
         <form [formGroup]="form" #formDirective="ngForm">
             <mat-accordion class="example-headers-align">
                 <mat-expansion-panel expanded="opened">
@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="col">
     
-                            <mat-form-field class="quarter-width">
+                            <mat-form-field class="example-full-width">
                                 <mat-label>Category</mat-label>
                                 <mat-select formControlName="category" value="">
     
@@ -62,8 +62,8 @@
                     <!-- end-->
     
                     <!--user account-->
-                    <div class="row">
-                        <div class="col-2">
+                 
+                        <div class="col">
     
                             <mat-form-field class="example-full-width">
                                 <mat-label>Sold by</mat-label>
@@ -94,7 +94,7 @@
                         </div>
     
     
-                        <div class="col-2">
+                        <div class="col">
     
                             <mat-form-field class="example-full-width">
                                 <mat-label>Quantity</mat-label>
@@ -103,7 +103,7 @@
                             </mat-form-field>
     
                         </div>
-                        <div class="col-2">
+                        <div class="col">
     
                             <mat-form-field class="example-full-width">
                                 <mat-label>Threshold</mat-label>
@@ -113,43 +113,40 @@
                         </div>
     
     
-                    </div>
-    
-                    <div class="row">
-                        <div class="col-6">
+               
+               
+                        <div class="col">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Barcode</mat-label>
                                 <input matInput formControlName="barcode" placeholder="Enter product barcode">
                             </mat-form-field>
                         </div>
     
-                        <div class="col-6">
+                        <div class="col">
                             <mat-form-field class="example-full-width">
                                 <mat-label>SKU (optional)</mat-label>
                                 <input matInput formControlName="sku" placeholder="Enter product SKU">
                             </mat-form-field>
                         </div>
     
-                    </div>
+                  
     
     
-                    <div class="row">
-    
-                        <div class="col-6">
+                        <div class="col">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Cost</mat-label>
                                 <input matInput type="number" formControlName="cost" placeholder="0.00">
                             </mat-form-field>
                         </div>
     
-                        <div class="col-6">
+                        <div class="col">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Price</mat-label>
                                 <input matInput type="number" formControlName="price" placeholder="0.00">
                             </mat-form-field>
                         </div>
     
-                    </div>
+                
                     <!--edd of account-->
     
                     <div class="row">
