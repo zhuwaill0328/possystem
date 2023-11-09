@@ -60,14 +60,16 @@ export class POSCashierComponent implements OnInit {
     this.auth.logout();
   }
   addData(data: any, isadd: boolean = true) {
-    if(data.Stocks.Quantity <=0 ){
-      return;
-    }
+    
     if (this.results.length > 0) {
       let index: any = this.results.indexOf(data);
       if (index !== -1) {
 
         if (isadd == true) {
+
+          if(data.Stocks.Quantity <=0 ){
+            return;
+          }
 
           if (data.Stocks.Quantity == 0) return;
           data.Stocks.Quantity--;

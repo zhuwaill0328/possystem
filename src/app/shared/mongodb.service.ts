@@ -25,6 +25,21 @@ export class MongodbService {
     Authorization: 'Bearer ' + sessionStorage.getItem('token')
   }
 
+  getGcashEndPoint(action: queryType){
+    switch(action){
+      case queryType.INSERT:
+        return environment.EndPoint + "gcash/create";
+        break;
+      case queryType.UPDATE:
+          return environment.EndPoint + "gcash/update";
+          break;
+      case queryType.READ:
+      default:
+        return environment.EndPoint + "gcash/get";
+
+  }
+  }
+
   getCategoryEndPoint(action: queryType){
 
     switch(action){
