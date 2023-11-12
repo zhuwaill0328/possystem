@@ -16,17 +16,17 @@ export class POSCustomerComponent implements OnInit {
     private mdb: MongodbService,
     private http: HttpClient,
     private dialog:MatDialog,
-  public dialogref: MatDialogRef<POSCustomerComponent>, 
-  @Inject(MAT_DIALOG_DATA) public data: any
-    
+  
   ){
 
   }
 
+
 customer:any 
   selected(customer:any){
     this.customer =customer
-    this.dialogref.close(this.customer)
+    sessionStorage.setItem('customer',customer)
+    //this.dialogref.close(this.customer)
   }
  
  search(control: any) {

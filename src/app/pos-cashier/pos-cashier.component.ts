@@ -11,6 +11,7 @@ import { PosPaymentModalComponent } from './pos-payment-modal/pos-payment-modal.
 import { PosGcashModalComponent } from './pos-gcash-modal/pos-gcash-modal.component';
 import Swal from 'sweetalert2';
 import { POSCustomerComponent } from '../pos-customer/pos-customer.component';
+import { PosCustomerDisplayComponent } from '../pos-customer/pos-customer-display/pos-customer-display.component';
 
 enum PaymentType{
   CASH = 0,
@@ -168,7 +169,7 @@ export class POSCashierComponent implements OnInit {
   }
   customer:any 
   openCustomer(){
-    let result = this.dialog.open(POSCustomerComponent,{
+    let result = this.dialog.open(PosCustomerDisplayComponent,{
       minWidth:'50vw'
     })
     .afterClosed().subscribe((data:any)=>{
