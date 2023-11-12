@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <h1 mat-dialog-title>Total: {{transaction.transaction.total}}</h1>
+    <h1 mat-dialog-title>Total: {{transaction.transaction.total  | number: '1.2' }}</h1>
     <form style="width: 100%;" [formGroup]="payment">
     <div class="row">
        

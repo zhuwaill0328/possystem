@@ -53,21 +53,21 @@
 
     </section>
 
-    <section class="container cart-footer">
+    <section class="container-fluid cart-footer">
       <div class="row">
-        <div class="col-6 text-white mt-3">
+        <div class="col-1 text-white mt-3">
           <p>Total:</p>
         </div>
-        <div class="col-6 text-warning mt-3">
-          <p style="font-size: 1.2rem;" class="float-end"><strong>P {{ getTotalCost() | number: '2.2' }}</strong></p>
+        <div class="col text-warning mt-3">
+          <p style="font-size: 3.2rem;" class="float-end"><strong>P {{ getTotalCost() | number: '1.2' }}</strong></p>
         </div>
         <hr>
       </div>
 
       <div class="row ">
-        <button class="btn-payment mb-2 mx-1"  mat-raised-button color="primary">CUSTOMER</button>
+        <button class="btn-payment mb-2 mx-1"  (click)="openCustomer()" mat-raised-button color="primary">CUSTOMER</button>
     
-        <button class="btn-payment   mb-2 mx-1" (click)="processPayment(1)" mat-raised-button color="primary">GCASH PAYMENT</button>
+        <button class="btn-payment   mb-2 mx-1" (click)="processPayment(1)" mat-raised-button color="primary">RETURN ITEMS</button>
     
         <button class="btn-payment mb-2 mx-1" (click)="processPayment(2)" mat-raised-button color="primary">CLIENT CREDIT</button>
     
@@ -79,7 +79,7 @@
   <mat-sidenav-content>
     <div class="content">
       <div class="toolbar">
-        <mat-toolbar>
+        <mat-toolbar class="stickyHeader">
           <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 30%;">
          
             <input autofocus (input)="searchProduct($event)" matInput placeholder="Search">
@@ -89,9 +89,9 @@
           
           <div class="box">
             
-           <button mat-button (click)="openGcash(3)" class="mb-3 mx-1"> GCASH IN</button>
-           <button mat-button (click)="openGcash(4)" class="mb-3 mx-1"> GCASH OUT</button>
-            <mat-icon [matMenuTriggerFor]="account">menu</mat-icon>
+           <button mat-flat-button color="primary" (click)="openGcash(3)" class="mb-3 mx-1 "> GCASH IN</button>
+           <button mat-flat-button color="warn" (click)="openGcash(4)" class="mb-3 mx-1 "> GCASH OUT</button>
+            <mat-icon class="text-white" [matMenuTriggerFor]="account">menu</mat-icon>
             <mat-menu #account="matMenu" xPosition="before">
               <button mat-menu-item>Acount</button>
               <button *ngIf="admin" mat-menu-item routerLink="/home/dashboard">Back to Dashboard</button>
@@ -124,7 +124,7 @@
                           <mat-icon>add</mat-icon>
                         </button></div>
                       <div class="col price ">
-                        <p><strong>P{{row.Price | number: '2.2'}}</strong></p>
+                        <p><strong>P{{row.Price | number: '1.2'}}</strong></p>
                       </div>
                     </div>
 

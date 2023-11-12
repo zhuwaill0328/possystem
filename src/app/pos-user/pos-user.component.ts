@@ -27,7 +27,7 @@ export class POSUserComponent {
     lastname: new FormControl('', Validators.required),
     status: new FormControl('Active', Validators.required),
     role: new FormControl('Standard', Validators.required),
-    phone: new FormControl('', Validators.required),
+    phone: new FormControl('', [Validators.required,Validators.minLength(11),Validators.maxLength(11)]),
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
   })
@@ -156,7 +156,7 @@ togglePanel(data:boolean ) {
       Password: this.form.value.password,
       Pin: ''
     }
-    console.log(bodyData)
+    //console.log(bodyData)
     this.http.post(this.mdb.getUserEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
       if (data.status) {
@@ -198,7 +198,7 @@ togglePanel(data:boolean ) {
       Pasword: this.form.value.password
     }
 
-    console.log(bodyData)
+    //console.log(bodyData)
 
     this.http.patch(this.mdb.getUserEndPoint(queryType.UPDATE), bodyData, { responseType: 'json', headers: this.mdb.headers })
       .subscribe((data: any) => {

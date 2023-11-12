@@ -75,7 +75,7 @@ export class PosInoutmodalComponent implements OnInit {
         responseType: 'json', headers: this.mdb.headers
       }).subscribe((result:any)=>{
 
-        console.log(result)
+        //console.log(result)
 
       })
 

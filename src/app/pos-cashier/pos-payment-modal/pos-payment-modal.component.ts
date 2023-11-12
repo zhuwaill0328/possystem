@@ -29,6 +29,11 @@ export class PosPaymentModalComponent implements OnInit {
 
   }
 
+  getPaymentChanges(){
+    const value:any = this.payment.value.total
+    return parseFloat(value) - parseFloat(this.transaction.transaction.total) 
+  }
+
   acceptPayment() {
 
     if (this.payment.valid) {
@@ -104,7 +109,8 @@ export class PosPaymentModalComponent implements OnInit {
       Payment: {
         Amount: this.payment.value.total,
         Discount: 0.00,
-        Type: 0
+        Type: 0,
+        Total: this.transaction.transaction.total 
       },
       Status: 'Paid',
       Cart: cartitems,
@@ -115,11 +121,9 @@ export class PosPaymentModalComponent implements OnInit {
     this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
       if (data.status) {
-
-        alert(data.message);
-
         let result = {
-            submitFlag: true
+            submitFlag: true,
+            changes: this.getPaymentChanges()
         }
 
         this.dialogref.close(result);

@@ -60,7 +60,9 @@ import { DialogComponent } from './dialog/dialog.component';
 import { PosPaymentModalComponent } from './pos-cashier/pos-payment-modal/pos-payment-modal.component';
 import { PosGcashModalComponent } from './pos-cashier/pos-gcash-modal/pos-gcash-modal.component';
 import { PosSystemComponent } from './pos-system/pos-system.component';
-
+import { CommonModule } from '@angular/common';
+import { CartitemsComponent} from './pos-transaction/cartitems/cartitems.component'
+import {CustomerCrudComponent} from './pos-customer/customer-crud/customer-crud.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,7 +81,9 @@ import { PosSystemComponent } from './pos-system/pos-system.component';
     DialogComponent,
     PosPaymentModalComponent,
     PosGcashModalComponent,
-    PosSystemComponent
+    PosSystemComponent,
+    CartitemsComponent,
+    CustomerCrudComponent
   ],
   imports: [
     BrowserModule,

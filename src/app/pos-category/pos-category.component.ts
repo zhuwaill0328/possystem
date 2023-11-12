@@ -10,6 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { GlobalfunctionsService } from '../shared/globalfunctions.service';
+import { query } from 'express';
 @Component({
   selector: 'app-pos-category',
   templateUrl: './pos-category.component.html',
@@ -49,6 +50,7 @@ export class POSCategoryComponent implements OnInit, AfterViewInit {
   }
   ngOnInit(): void {
     this.getData();
+   
   }
 
   async getData() {
@@ -64,11 +66,36 @@ export class POSCategoryComponent implements OnInit, AfterViewInit {
 
   }
 
+  productbulkUpdate(category:any,newCategory:any){
+
+    let products = [];
+    const bodyData=  category
+    this.http.get(this.mdb.getProductEndpoint(queryType.READ)  + '/?Category=' + bodyData, {responseType: 'json',headers: this.mdb.headers})
+    .subscribe((data:any)=>{
+        products = data.data
+        let ids=[]
+        for(var product of products){
+            ids.push(product._id)
+        }
+        
+        const productData = {
+          products: ids,
+          category: newCategory
+        }
+        this.http.patch(this.mdb.getProductEndpoint(queryType.PRODUCTBULK),productData, { responseType: 'json', headers: this.mdb.headers})
+        .subscribe((data:any)=>{
+          //console.log('Product Result',data)
+        })
+    })
+
+  }
+
   updating: boolean = false;
   datatoupdate: any;
-  
+  recentData: any;
   edit(data: any) {
     this.updating = true;
+    this.recentData = data.Name
     this.form.controls.Name.setValue(data.Name);
     this.datatoupdate = data;
     this.gotoTop();
@@ -154,6 +181,7 @@ export class POSCategoryComponent implements OnInit, AfterViewInit {
     this.form.controls.Name.markAsUntouched();
     this.updating = false;
     this.datatoupdate = '';
+    this.recentData =''
 
   }
 
@@ -193,12 +221,13 @@ export class POSCategoryComponent implements OnInit, AfterViewInit {
       Id: data._id,
       Name: this.form.value.Name
     }
-
-    console.log(bodyData)
-
+    const cat = this.recentData
+    const newvalue = this.form.value.Name
     this.http.patch(this.mdb.getCategoryEndPoint(queryType.UPDATE), bodyData, { responseType: 'json', headers: this.mdb.headers })
       .subscribe((data: any) => {
         if (data.status) {
+          
+          this.productbulkUpdate(cat,newvalue);
           this.reloadPage();
           this.defaultAlert.push({
             type: 'success',

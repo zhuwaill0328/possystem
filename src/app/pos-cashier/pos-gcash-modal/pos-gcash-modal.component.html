@@ -17,7 +17,7 @@
             
                     <mat-form-field class="example-full-width">
                         <mat-label>Mobile Number</mat-label>
-                        <input matInput formControlName="Phone" placeholder="Enter customer gcash number">
+                        <input matInput maxlength="11" formControlName="Phone" placeholder="Enter customer gcash number">
                     </mat-form-field>
             
                 </div>
@@ -26,46 +26,6 @@
             </div>
             
         </div>
-
-        <div class="row">
-            
-            <div class="col">
-                <mat-form-field>
-                    <mat-label>Choose an option</mat-label>
-                    <mat-select [value]="getCurrentUserId()"  (valueChange)="userValueChange($event)">
-                      <mat-option  *ngFor="let user of users;let i = index" [value]="user">{{user.Name.Firstname}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-            </div>
-        </div>
-
-        <div class="row" *ngIf="userVisible" formGroupName="User">
-            <div class="col">
-            
-                <mat-form-field class="example-full-width">
-                    <mat-label>User</mat-label>
-                    <input readonly  matInput formControlName="Name" >
-                </mat-form-field>
-        
-            </div>
-            <div class="col">
-            
-                <mat-form-field class="example-full-width">
-                    <mat-label>User Gcash Number</mat-label>
-                    <input readonly matInput formControlName="Phone" >
-                </mat-form-field>
-        
-            </div>
-            <div class="col">
-            
-                <mat-form-field class="example-full-width">
-                    <mat-label>Role</mat-label>
-                    <input  matInput formControlName="Role" >
-                </mat-form-field>
-        
-            </div>
-        </div>
-    
         <div class="row">
             <div class="col">
             
@@ -87,17 +47,75 @@
             
                 <mat-form-field class="example-full-width">
                     <mat-label>Transaction Fee</mat-label>
-                    <input  type="number" matInput formControlName="TransactionFee" placeholder="Enter Amount">
+                    <input  type="number"  matInput value="0.00" formControlName="TransactionFee" placeholder="Enter Amount">
                 </mat-form-field>
         
             </div>
         </div>
+
+        <div class="row">
+            <div class="col">
+                <mat-checkbox (change)="ammountToReceived()" formControlName="FeeDeducted" [(ngModel)]='isdeducted'class="example-margin">Fee is deducted to the amount?</mat-checkbox>
+            </div>
+            
+        </div>
+
+        <div class="row mt-2">
+            <div *ngIf="isdeducted" class="col">
+                <mat-form-field>
+                 <mat-label>Total Amount</mat-label>
+                 <input  type="text" readonly matInput value="0.00" [value]="ammountToReceived()" placeholder="Enter Amount">
+             
+                </mat-form-field>
+             </div>
+        </div>
+ 
+        <div class="row">
+            
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Select GCASH Account</mat-label>
+                    <mat-select [value]="getCurrentUserId()"   (valueChange)="userValueChange($event)">
+                      <mat-option   *ngFor="let user of users;let i = index" [value]="user">{{user.Name.Firstname}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="userVisible" formGroupName="User">
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>User</mat-label>
+                    <input readonly  matInput formControlName="Name" >
+                </mat-form-field>
+        
+            </div>
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>User Gcash Number</mat-label>
+                    <input maxlength="11" readonly matInput formControlName="Phone" >
+                </mat-form-field>
+        
+            </div>
+            <div class="col">
+            
+                <mat-form-field class="example-full-width">
+                    <mat-label>Role</mat-label>
+                    <input  matInput formControlName="Role" >
+                </mat-form-field>
+        
+            </div>
+        </div>
+    
+       
         <div class="row mb-4 float-end">
             <div class="col">
                 <button mat-button color="warn" mat-dialog-close >Cancel</button>
             </div>
             <div class="col">
-                <button mat-raised-button color="primary" mat-dialog-close>Proceed</button>
+                <button (click)="processedGcash()" mat-raised-button color="primary">Proceed</button>
             </div>
             
         </div>

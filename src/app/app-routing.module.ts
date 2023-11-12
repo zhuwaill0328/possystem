@@ -12,6 +12,8 @@ import { POSUserComponent } from './pos-user/pos-user.component';
 import { IsAdminGuard, PosAdminGuard } from './shared/authguard.guard';
 import { PosProductinoutComponent } from './pos-productinout/pos-productinout.component';
 import { PosSystemComponent } from './pos-system/pos-system.component';
+import { CustomerCrudComponent } from './pos-customer/customer-crud/customer-crud.component';
+import { POSCustomerComponent } from './pos-customer/pos-customer.component';
 
 const routes: Routes = [
   {
@@ -38,6 +40,9 @@ const routes: Routes = [
     },
     {
       path: 'system',canActivate: [IsAdminGuard]  , component: PosSystemComponent
+    },
+    {
+      path: 'customer',canActivate: [IsAdminGuard]  , component: POSCustomerComponent
     },
 
     ]
