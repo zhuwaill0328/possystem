@@ -25,6 +25,26 @@ export class MongodbService {
     Authorization: 'Bearer ' + sessionStorage.getItem('token')
   }
 
+
+  getPaymentType(type:number){
+    switch(type){
+      case 0:
+        return 'CASH';
+      case 1:
+        return 'GCASH';
+      case 2:
+        return 'CREDIT';
+      case 3:
+        return 'CASH IN'
+      case 4:
+        return 'CASH OUT';
+      default:
+        return 'CASH'
+      
+    }
+
+  }
+
   getGcashEndPoint(action: queryType){
     switch(action){
       case queryType.INSERT:

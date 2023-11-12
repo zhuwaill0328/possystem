@@ -109,7 +109,8 @@ export class PosPaymentModalComponent implements OnInit {
       Payment: {
         Amount: this.payment.value.total,
         Discount: 0.00,
-        Type: 0
+        Type: 0,
+        Total: this.transaction.transaction.total 
       },
       Status: 'Paid',
       Cart: cartitems,

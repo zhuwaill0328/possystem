@@ -7,8 +7,8 @@
     </div>
     <div class="menu">
         <div class="menu-item">
-            <div  *ngFor="let item of navData">
-                <button [routerLink]="[item.routerLink]" mat-button class="menu-button" >
+            <div  *ngFor="let item of navData;let i = index">
+                <button  (click)="selected(i)" [routerLink]="[item.routerLink]" mat-button [ngClass]="" class="" >
                     <mat-icon>{{item.icon}}</mat-icon>
                     <span>{{item.label}}</span>
                 </button>

@@ -89,5 +89,9 @@ export class POSSidenavComponent implements OnInit {
 
 
 ]
+selectedTab = 0;
+selected(index:number){
+this.selectedTab = index
+}
 
 }

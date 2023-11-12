@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MongodbService, queryType } from '../shared/mongodb.service';
 import { validateVerticalPosition } from '@angular/cdk/overlay';
@@ -23,12 +23,11 @@ import { GlobalfunctionsService } from '../shared/globalfunctions.service';
 export class POSProductsComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   displayedColumns: any = ['barcode', 'category', 'name', 'stocks', 'cost', 'price', 'status', 'actions'];
 
   datasource: MatTableDataSource<any> = new MatTableDataSource<any>;
-
 
   error: boolean = false;
   form = new FormGroup({
@@ -66,6 +65,42 @@ export class POSProductsComponent implements OnInit {
 
     this.openeditor =true;
 
+
+  }
+  ngAfterViewInit(){
+    this.sort.sortChange.subscribe(()=> (this.paginator.pageIndex = 0))
+  }
+
+  setupTableSorter(){
+    this.datasource.paginator = this.paginator
+    this.datasource.sort = this.sort
+  }
+
+  storedData:any=[]
+
+  sortChange(sort:Sort){
+    const data = this.results
+    if(!sort.active || sort.direction === ''){
+      this.storedData = data;
+      return;
+    }
+
+    this.storedData = data.sort((a:any,b:any)=>{
+      const isAsc = sort.direction === 'asc';
+      switch(sort.active){
+        case 'name':
+          return this.compare(a.Name,b.Name,isAsc)
+        case 'category':
+          return this.compare(a.Category,b.Category,isAsc)
+        default:
+          return 0
+      }
+    })
+    
+  }
+
+   compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   
 
@@ -152,7 +187,10 @@ export class POSProductsComponent implements OnInit {
   async getData() {
 
     this.results = [];
-    this.http.get(this.mdb.getProductEndpoint(queryType.READ), { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
+    const query = {
+      Name : 1
+    }
+    this.http.get(this.mdb.getProductEndpoint(queryType.READ) ,{ responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
       this.results = data.data;
       this.datasource = new MatTableDataSource<any>(this.results);
