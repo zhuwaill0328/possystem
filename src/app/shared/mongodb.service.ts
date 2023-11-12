@@ -44,7 +44,34 @@ export class MongodbService {
     }
 
   }
+  getCustomerEndpoint(action: queryType){
+    switch(action){
+      case queryType.INSERT:
+        return environment.EndPoint + "customer/create";
+        break;
+      case queryType.UPDATE:
+          return environment.EndPoint + "customer/update";
+          break;
+      case queryType.READ:
+      default:
+        return environment.EndPoint + "customer/get";
 
+  }
+  }
+  getDebitEndPoint(action: queryType){
+    switch(action){
+      case queryType.INSERT:
+        return environment.EndPoint + "debit/create";
+        break;
+      case queryType.UPDATE:
+          return environment.EndPoint + "debit/update";
+          break;
+      case queryType.READ:
+      default:
+        return environment.EndPoint + "debit/get";
+
+  }
+  }
   getGcashEndPoint(action: queryType){
     switch(action){
       case queryType.INSERT:

@@ -1,1 +1,20 @@
-<p>customer-crud works!</p>
+<div class="container">
+    <div class="row mt-2 mb-2">
+        <h2>{{isupdate? 'Update Customer':'Create Customer'}}</h2>
+        <form [formGroup]="form">
+            <mat-form-field class="example-full-width">
+                <mat-label>Customer Name</mat-label>
+                <input matInput formControlName="Name"   placeholder="Enter customer name">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput maxlength="11" minlength="11" formControlName="Phone"   placeholder="Enter customer mobile number.">
+              </mat-form-field>
+             <div class="mt-2 mb-2">
+                <button mat-button mat-dialog-close>Cancel</button>
+                <button *ngIf="!isupdate" mat-flat-button color="primary" (click)="save()" >Save</button>
+                <button *ngIf="isupdate" mat-flat-button color="primary" (click)="update()" >Update</button>
+             </div>
+        </form>
+    </div>
+</div>

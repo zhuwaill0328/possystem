@@ -18,7 +18,11 @@ export class POSSidenavComponent implements OnInit {
 
     this.fullname = sessionStorage.getItem('user')
     this.role = sessionStorage.getItem('role')
+    const selected = sessionStorage?.getItem('selectedTab')
+    this.selected(selected? parseInt(selected):0)
   }
+
+  
 
 
 
@@ -31,60 +35,78 @@ export class POSSidenavComponent implements OnInit {
     routerLink:'dashboard',
     icon: 'dashboard',
     label: 'Dashboard',
-    allowed: true
+    allowed: true,
+    selected : false
   },
   
   {
     routerLink:'category',
     icon: 'category',
     label: 'Category',
-    allowed: this.isAdmin 
+    allowed: this.isAdmin ,
+    selected : false
   },
   {
     routerLink:'products',
     icon: 'category',
     label: 'Products',
-    allowed: this.isAdmin 
+    allowed: this.isAdmin ,
+    selected : false
   },
   {
     routerLink:'stockinout',
     icon: 'category',
     label: 'Stock History',
-    allowed: this.isAdmin 
+    allowed: this.isAdmin ,
+    selected : false
   },
   {
     routerLink:'/pos',
     icon: 'payments',
     label: 'POS Terminal',
-    allowed: this.isAdmin || this.iscashier
+    allowed: this.isAdmin || this.iscashier,
+    selected : false
   },
   
   {
     routerLink:'transactions',
-    icon: 'payments',
+    icon: 'list',
     label: 'Transaction',
-    allowed: true
-  }
-  ,
+    allowed: true,
+    selected : false
+  },
   {
     routerLink:'gcash',
-    icon: 'payments',
+    icon: 'list',
     label: 'Gcash In-Out',
-    allowed: true
+    allowed: true,
+    selected : false
   }
+  ,
+  
+  {
+    routerLink:'customer',
+    icon: 'group',
+    label: 'Customers',
+    allowed: true,
+    selected : false
+  }
+  
   ,
   {
     routerLink:'users',
-    icon: 'payments',
+    icon: 'group',
     label: 'Users',
-    allowed: this.isAdmin
+    allowed: this.isAdmin,
+    selected : false
   }
   ,
   {
     routerLink:'system',
     icon: 'settings',
     label: 'System',
-    allowed: this.isAdmin
+    allowed: this.isAdmin,
+    selected : false
   }
 
 
@@ -92,6 +114,22 @@ export class POSSidenavComponent implements OnInit {
 selectedTab = 0;
 selected(index:number){
 this.selectedTab = index
+sessionStorage.setItem('selectedTab',this.selectedTab.toString())
+this.clearSelection()
+if(index!=4)this.setSelected(index)
+
+}
+
+clearSelection(){
+  for(var d of this.navData){
+    d.selected =false
+  }
+}
+
+setSelected(index:number){
+let data = this.navData[index]
+data.selected = true
+this.navData[index]=data
 }
 
 }

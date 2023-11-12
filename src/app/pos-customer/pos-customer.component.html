@@ -1,1 +1,33 @@
-<p>pos-customer works!</p>
+<div class="container p-2">
+    <button mat-flat-button color="primary" (click)="createCustomer()" >Create</button>
+
+    <mat-form-field class="example-full-width mt-2 mb-2">
+        <mat-label><mat-icon>search</mat-icon> Search Customer</mat-label>
+        <input (keyup)="search($event)" matInput    placeholder="Search here...">
+      </mat-form-field>
+      
+<table class="table table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Mobile No.</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr  *ngFor="let customer of dataSource">
+        
+            <td>
+                {{customer.Name}}
+            </td>
+            <td>
+                {{customer.Phone}}
+            </td>
+            <td>
+                <button mat-button (click)="selected(customer)">Select</button>
+                <button  (click)="updateCustomer(customer)" mat-button><mat-icon>edit</mat-icon> <span>Edit</span></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

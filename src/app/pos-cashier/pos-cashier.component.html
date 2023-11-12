@@ -65,9 +65,9 @@
       </div>
 
       <div class="row ">
-        <button class="btn-payment mb-2 mx-1"  mat-raised-button color="primary">CUSTOMER</button>
+        <button class="btn-payment mb-2 mx-1"  (click)="openCustomer()" mat-raised-button color="primary">CUSTOMER</button>
     
-        <button class="btn-payment   mb-2 mx-1" (click)="processPayment(1)" mat-raised-button color="primary">GCASH PAYMENT</button>
+        <button class="btn-payment   mb-2 mx-1" (click)="processPayment(1)" mat-raised-button color="primary">RETURN ITEMS</button>
     
         <button class="btn-payment mb-2 mx-1" (click)="processPayment(2)" mat-raised-button color="primary">CLIENT CREDIT</button>
     
