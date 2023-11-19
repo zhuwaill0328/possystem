@@ -1,6 +1,7 @@
 mat-sidenav{
     background-color: gainsboro;
     width: 450px;
+    height: 100%;
 }
 mat-sidenav-container{
     width: 100%;
@@ -18,7 +19,10 @@ mat-sidenav-container{
   }
 
 .example-container {
-    height: 80%;
+    position: sticky !important;
+    top: 0;
+    z-index: 2;
+    height: 85%;
     width: 100%;
     max-width: 100%;
     overflow: auto;
@@ -34,13 +38,11 @@ td{
     font-size: 13px;
     height: 50px;
     width: 100px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .cart-footer{
 
-    height: 20%;
+    height: 15%;
     background-color: #0f172a !important;
 }
 
@@ -85,13 +87,27 @@ mat-sidenav-content{
     }
 }
 
-.stickyHeader{
-    background-color: #0f172a !important;
+.sticktop{
     position: sticky !important;
     top: 0;
+    z-index: 2;
 }
 
-mat-toolbar{
+.stickyHeader{
+    background-color: #0f172a !important;
+   
+}
+
+.mat-header-cell{
+    background-color: #0f172a !important;
+    color: white !important;
+    height: 64px !important;
+}
+
+mat-toolbar,.toolbar{
+    position: sticky !important;
+    top: 0;
+    z-index: 2;
     mat-icon{
         margin-left: 15px;
 

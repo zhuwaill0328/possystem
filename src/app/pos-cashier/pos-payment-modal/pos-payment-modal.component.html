@@ -5,7 +5,7 @@
        
             <mat-form-field >
           
-                <input matInput style="width: 100%;" type="text" autocomplete="off" formControlName="total" value="0.00" [defaultValue]="0.00"  placeholder="0.00">
+                <input matInput (keyup)="process($event)" style="width: 100%;" type="text" autocomplete="off" formControlName="total" value="0.00" [defaultValue]="0.00"  placeholder="0.00">
               </mat-form-field>
       
 
@@ -69,7 +69,7 @@
 
     <div class="col-sm-6">
        <div class="row mx-1">
-        <button  style="height: 60px;" (click)="acceptPayment()" mat-raised-button color="primary" >ACCEPT PAYMENT</button>
+        <button type="submit" style="height: 60px;" (click)="acceptPayment()" mat-raised-button color="primary" >ACCEPT PAYMENT</button>
        </div>
     </div>
 

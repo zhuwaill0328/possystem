@@ -61,7 +61,7 @@ export class POSSidenavComponent implements OnInit {
     selected : false
   },
   {
-    routerLink:'/pos',
+    routerLink:'/pos/terminal',
     icon: 'payments',
     label: 'POS Terminal',
     allowed: this.isAdmin || this.iscashier,

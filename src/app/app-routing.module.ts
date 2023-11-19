@@ -14,6 +14,7 @@ import { PosProductinoutComponent } from './pos-productinout/pos-productinout.co
 import { PosSystemComponent } from './pos-system/pos-system.component';
 import { CustomerCrudComponent } from './pos-customer/customer-crud/customer-crud.component';
 import { POSCustomerComponent } from './pos-customer/pos-customer.component';
+import { PosClientDebitComponent } from './pos-cashier/pos-client-debit/pos-client-debit.component';
 
 const routes: Routes = [
   {
@@ -48,7 +49,14 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'pos',canActivate: [IsAdminGuard]  , component: POSCashierComponent
+    path: 'pos',canActivate: [IsAdminGuard]  ,
+    children: [{
+      path: 'client-debit',canActivate: [IsAdminGuard], component : PosClientDebitComponent
+
+    },{
+      path: 'terminal',canActivate: [IsAdminGuard]  , component: POSCashierComponent,
+  
+    }]
   },
   {
     component: POSLoginComponent,

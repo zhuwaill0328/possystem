@@ -1,1 +1,56 @@
-<p>pos-client-debit works!</p>
+<mat-toolbar class="stickyHeader mb-2">
+    <button  (click)="goback()" class="mx-2"   mat-flat-button color="primary">
+        <mat-icon>keyboard_backspace</mat-icon><span>Back to POS Terminal</span>
+      </button>
+
+  </mat-toolbar>
+<div class="container-fluid">
+   
+        <h1>Customer Debit Records (PAUTANG)</h1>
+      <div class="row">
+        <mat-form-field >
+            <mat-label>Search</mat-label>
+             <input (keyup)="search($event)" matInput  style="width: 80%;" type="text" >
+         </mat-form-field>
+      </div>
+    
+      <mat-button-toggle-group class="mb-2" name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle [ngClass]=" selectedStatus == 'Unpaid' ? 'selected' : '' " value="Unpaid" (click)="filterbystatus('Unpaid')" value="italic">Unpaid</mat-button-toggle>
+        <mat-button-toggle [ngClass]=" selectedStatus == 'Paid' ? 'selected' : '' " value="Paid"  (click)="filterbystatus('Paid')" value="bold">Paid</mat-button-toggle>
+         </mat-button-toggle-group>
+    <table class="table table-hover table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Reference Code</th>
+                <th>Transaction Amount</th>
+                <th>Balance</th>
+                <th>Payment History</th>
+                <th>Status</th>
+                <th>User</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor=" let c of debits">
+                <td>{{c.Customer.Name}}</td>
+                <td>{{c.Transaction.Date | date: "MMMM dd, yyyy hh:mm:ss"}}</td>
+                <td>{{c.Transaction.Id}}</td>
+                <td>{{c.Transaction.Amount | number : '.2-2'}}</td>
+                <td>{{c.Transaction?.Balance || 0.00 | number : '.2-2'}}</td>
+                <td>
+                    <button (click)="openlist(c)" mat-button><mat-icon>list</mat-icon></button>
+                </td>
+                <td>
+                    {{c.Status}}
+                </td>
+                <td>{{c.Username}}</td>
+                <td>
+    
+                    <button [disabled]="c.Status =='Paid'" mat-button (click)="updatePayments(c)"><mat-icon>edit</mat-icon> Update Payment</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

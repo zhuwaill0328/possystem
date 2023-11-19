@@ -33,7 +33,7 @@ export class MongodbService {
       case 1:
         return 'GCASH';
       case 2:
-        return 'CREDIT';
+        return 'DEBIT';
       case 3:
         return 'CASH IN'
       case 4:
@@ -44,6 +44,7 @@ export class MongodbService {
     }
 
   }
+  
   getCustomerEndpoint(action: queryType){
     switch(action){
       case queryType.INSERT:

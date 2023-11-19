@@ -64,7 +64,13 @@ import { CommonModule } from '@angular/common';
 import { CartitemsComponent} from './pos-transaction/cartitems/cartitems.component'
 import {CustomerCrudComponent} from './pos-customer/customer-crud/customer-crud.component';
 import { PosCustomerDisplayComponent } from './pos-customer/pos-customer-display/pos-customer-display.component';
-import { PosClientDebitComponent } from './pos-cashier/pos-client-debit/pos-client-debit.component'
+import { PosClientDebitComponent } from './pos-cashier/pos-client-debit/pos-client-debit.component';
+import { PosSelectCustomerComponent } from './pos-cashier/pos-select-customer/pos-select-customer.component';
+import { PosDebitPaymentComponent } from './pos-cashier/pos-debit-payment/pos-debit-payment.component';
+import { PosDebitRepaymentComponent } from './pos-cashier/pos-debit-repayment/pos-debit-repayment.component';
+import { PosDebitHistoryComponent } from './pos-cashier/pos-debit-history/pos-debit-history.component'
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -87,7 +93,12 @@ import { PosClientDebitComponent } from './pos-cashier/pos-client-debit/pos-clie
     CartitemsComponent,
     CustomerCrudComponent,
     PosCustomerDisplayComponent,
-    PosClientDebitComponent
+    PosClientDebitComponent,
+    PosSelectCustomerComponent,
+    PosDebitPaymentComponent,
+    PosDebitRepaymentComponent,
+    PosDebitHistoryComponent,
+    
   ],
   imports: [
     BrowserModule,

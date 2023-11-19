@@ -19,7 +19,10 @@ export class PosPaymentModalComponent implements OnInit {
   })
 
 
-  constructor(private http: HttpClient, private mdb : MongodbService,public dialogref: MatDialogRef<PosPaymentModalComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(private http: HttpClient,
+     private mdb : MongodbService,
+     public dialogref: MatDialogRef<PosPaymentModalComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any) {
     this.transaction = data;
 
   }
@@ -27,6 +30,12 @@ export class PosPaymentModalComponent implements OnInit {
 
 
 
+  }
+
+  process(event:any){
+    if(event.key.toLowerCase() == 'enter '){
+      this.addData();
+    }
   }
 
   getPaymentChanges(){

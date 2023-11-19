@@ -1,0 +1,67 @@
+
+<div class="container mt-2 mb-2">
+    <h1>CLIENT DEBIT (UTANG)</h1>
+    <button class="mb-1" mat-flat-button color="primary" (click)="addnewcustomer()">Add new customer</button>
+    <form [formGroup]="customer">
+        <mat-form-field class="example-full-width">
+            <mat-label>Select Customer</mat-label>
+            <input type="text"
+                    #input
+                   placeholder="Pick one"
+                   aria-label="Select Customer"
+                   matInput
+                   [formControl]="myControl"
+                   [matAutocomplete]="auto"
+                   (input)="filter()"
+                    (focus)="filter()">
+            <mat-autocomplete  autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option (click)="userValueChange(customer)" *ngFor="let customer of filteredOptions" [value]="customer.Name">{{customer.Name}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        <label for="">Customer Details</label>
+    <div class="row">
+        <mat-form-field >
+            <mat-label>Customer Name</mat-label>
+            <input matInput  readonly style="width: 100%;" type="text" formControlName="Name">
+          </mat-form-field>
+    </div>
+    <div class="row">
+        <mat-form-field >
+            <mat-label>Mobile Number</mat-label>
+            <input matInput readonly style="width: 100%;" type="text" formControlName="Phone">
+          </mat-form-field>
+    </div>
+    <div class="row">
+        <input   style="width: 100%;" type="hidden" formControlName="Id">
+       
+    </div>
+</form>
+<label for="">Transaction Details</label>
+<form [formGroup]="transaction">
+
+    <div class="row">
+        <mat-form-field >
+            <mat-label>Total Amount</mat-label>
+            <input matInput  style="width: 100%;" type="number" formControlName="Amount">
+          </mat-form-field>
+    </div>
+
+    
+</form>
+<hr>
+<form [formGroup]="paymentHistory">
+   
+    <label for="">Initial Payment (Optional)</label>
+    <div class="row">
+        <div class="col">
+         <mat-form-field >
+            <mat-label>Amount</mat-label>
+             <input matInput  style="width: 100%;" type="number" formControlName="Amount">
+         </mat-form-field>
+        </div>        
+     </div>
+</form>
+
+<button mat-button color="warn" mat-dialog-close>Cancel</button>
+<button mat-flat-button (click)="saveDebit()" color="primary">Save Client Debit</button>
+</div>

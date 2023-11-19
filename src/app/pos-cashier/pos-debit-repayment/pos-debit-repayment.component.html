@@ -1,0 +1,22 @@
+<div class="container mt-2 mb-2">
+
+    <h2>DEBIT PAYMENT (BAYAD UTANG)</h2>
+   <form [formGroup]="paymentgroup">
+    <div class="row">
+        <mat-form-field >
+            <mat-label>Current Balance</mat-label>
+            <input matInput  readonly style="width: 100%;" type="number" formControlName="balance">
+          </mat-form-field>
+    </div>
+    <label for="">Payment</label>
+    <div class="row">
+        <mat-form-field >
+            <mat-label>Amount</mat-label>
+            <input matInput  style="width: 100%;" type="number" formControlName="amount">
+          </mat-form-field>
+    </div>
+    <button mat-button matDialogClose color="warn">Cancel</button>
+    <button mat-flat-button (click)="saveData()" color="primary">Accept Payment</button>
+
+   </form>
+</div>

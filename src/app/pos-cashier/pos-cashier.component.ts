@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -12,6 +12,9 @@ import { PosGcashModalComponent } from './pos-gcash-modal/pos-gcash-modal.compon
 import Swal from 'sweetalert2';
 import { POSCustomerComponent } from '../pos-customer/pos-customer.component';
 import { PosCustomerDisplayComponent } from '../pos-customer/pos-customer-display/pos-customer-display.component';
+import { PosSelectCustomerComponent } from './pos-select-customer/pos-select-customer.component';
+import { PosDebitPaymentComponent } from './pos-debit-payment/pos-debit-payment.component';
+import { PosClientDebitComponent } from './pos-client-debit/pos-client-debit.component';
 
 enum PaymentType{
   CASH = 0,
@@ -28,7 +31,9 @@ enum PaymentType{
 })
 export class POSCashierComponent implements OnInit {
 
-  constructor(private auth: AuthService, private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog) { }
+  constructor(private auth: AuthService, private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog) {
+    
+   }
 
   admin: boolean = true;
   ngOnInit(): void {
@@ -61,6 +66,18 @@ export class POSCashierComponent implements OnInit {
   logout() {
     this.auth.logout();
   }
+
+
+  @ViewChild('yourInput', {static: false}) yourInput: ElementRef;
+
+modalOpen:boolean =false;
+onBlur(event:any) {
+
+  if(!this.modalOpen){
+    this.yourInput.nativeElement.focus()
+  }
+  
+}
   addData(data: any, isadd: boolean = true) {
     
     if (this.results.length > 0) {
@@ -99,6 +116,7 @@ export class POSCashierComponent implements OnInit {
       this.results.push(data);
     }
     this.table.renderRows();
+    this.scrollto()
   }
 
   categories: any = []
@@ -160,6 +178,14 @@ export class POSCashierComponent implements OnInit {
 
   }
 
+  scrollto(){
+    const element = document.getElementById('table-bottom')
+    element?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end'
+    })
+  }
+
   searchProduct(control: any) {
     const filter = control.target.value;
     this.filteredProduct = this.products.filter((data: any) =>
@@ -169,17 +195,19 @@ export class POSCashierComponent implements OnInit {
   }
   customer:any 
   openCustomer(){
-    let result = this.dialog.open(PosCustomerDisplayComponent,{
+    this.modalOpen = true
+    let result = this.dialog.open(PosClientDebitComponent,{
       minWidth:'50vw'
     })
     .afterClosed().subscribe((data:any)=>{
       this.customer =data
+      this.modalOpen = false
     })
 
   }
 
   openGcash(type: PaymentType = PaymentType.CASHIN ){
-
+    this.modalOpen = true
     let dialogref = this.dialog.open(PosGcashModalComponent,{
       disableClose:true,
       width: '90vw',
@@ -190,13 +218,59 @@ export class POSCashierComponent implements OnInit {
     })
 
     dialogref.afterClosed().subscribe(data=>{
-      
+      this.modalOpen = false
     })
   }
 
 
-  processPayment(paymentType: PaymentType,Customer: any = null) {
+  selectedCustomer:any = null
 
+  processPayment(paymentType: PaymentType) {
+    this.modalOpen = true
+    switch(paymentType){
+      case PaymentType.CASH:
+        this.processCashPayment('Walk-in');
+        break;
+      case PaymentType.CREDIT:
+        this.processDebitPayment()
+        break;
+    }
+   
+
+  }
+
+  processDebitPayment(){
+    if(this.results.length > 0){
+      let result = this.dialog.open(PosDebitPaymentComponent,{
+        minWidth: '30vw',
+        minHeight: '40vh',
+        data : {
+          amount : this.getTotalCost(),
+          cart : this.results
+        }
+     })
+ 
+     result.afterClosed().subscribe((data:any)=>{
+      this.modalOpen = false
+        if(data.submitFlag){
+           
+          while(this.results.length > 0){
+            this.results.splice(0,1)
+        }
+        this.results = []
+
+        
+        this.table.renderRows();
+        this.getTotalCost()
+        this.customer= ''
+       
+        }
+     })
+    }
+  }
+
+
+  processCashPayment(customer: any = null){
     if(this.results.length > 0){
 
       let dialogref = this.dialog.open(PosPaymentModalComponent, {
@@ -206,12 +280,12 @@ export class POSCashierComponent implements OnInit {
           transaction: {
             total: this.getTotalCost()
           },
-          customer:this.customer? this.customer.Name : 'Walk-in'
+          customer:customer.Name? customer.Name : 'Walk-in'
         }
       })
   
       dialogref.afterClosed().subscribe((result: any) => {
-        
+        this.modalOpen = false
         if (result.submitFlag) {
   
           
@@ -235,14 +309,7 @@ export class POSCashierComponent implements OnInit {
 
 
     }
-
-
-
-   
-
-
   }
-
 
 
 

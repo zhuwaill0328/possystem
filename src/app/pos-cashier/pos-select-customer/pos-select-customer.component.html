@@ -1,0 +1,33 @@
+
+
+<div class="container px-2">
+  
+    <mat-form-field class="example-full-width mt-2 mb-2">
+        <mat-label><mat-icon>search</mat-icon> Search Customer</mat-label>
+        <input (keyup)="search($event)" matInput    placeholder="Search here...">
+      </mat-form-field>
+      
+<table class="table table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Mobile No.</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr  *ngFor="let customer of dataSource">
+        
+            <td>
+                {{customer.Name}}
+            </td>
+            <td>
+                {{customer.Phone}}
+            </td>
+            <td>
+                <button mat-button (click)="selected(customer)">Select</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
