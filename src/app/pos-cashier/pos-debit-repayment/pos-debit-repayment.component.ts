@@ -86,16 +86,30 @@ export class PosDebitRepaymentComponent {
         })
 
         const bodyData = this.transaction
+        console.log(bodyData)
 
+        const transactionData = {
+          Id: bodyData.Transaction.Id,
+          Status: data.newBalance <= 0 ? 'Paid' : 'Unpaid'
+        }
 
-        this.http.patch(this.mdb.getDebitEndPoint(queryType.UPDATE),bodyData, {responseType: 'json', headers: this.mdb.headers} )
-        .subscribe((results:any)=>{
+        this.http.patch(this.mdb.getTransactionEndPoint(queryType.UPDATE),
+       transactionData ,{responseType: 'json', headers : this.mdb.headers})
+       .subscribe((result:any)=>{
+          console.log(result)
+          if(result.status){
+            this.http.patch(this.mdb.getDebitEndPoint(queryType.UPDATE),bodyData, {responseType: 'json', headers: this.mdb.headers} )
+            .subscribe((results:any)=>{
 
-          if(results.status){
-            this.dialogref.close()
+              if(results.status){
+                this.dialogref.close()
           }
           
         })
+
+          }
+       });
+        
       }
     }
 

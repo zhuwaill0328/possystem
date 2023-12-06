@@ -95,13 +95,13 @@
         <mat-toolbar class="stickyHeader">
           <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 30%;">
          
-            <input #yourInput  (blur)="onBlur($event)" autofocus (input)="searchProduct($event)" matInput placeholder="Search/Barcode...">
+            <input #yourInput  (blur)="onBlur($event)" autofocus (input)="searchProduct($event)" matInput placeholder="Enter Barcode...">
             <mat-icon matSuffix>search</mat-icon>
            
           </mat-form-field>
           
           <div class="box">
-            
+            <button mat-flat-button color="accent" (click)="openSearch()" class="mb-3 mx-1">Search Product</button>
            <button mat-flat-button color="primary" (click)="openGcash(3)" class="mb-3 mx-1 "> GCASH IN</button>
            <button mat-flat-button color="warn" (click)="openGcash(4)" class="mb-3 mx-1 "> GCASH OUT</button>
            <button mat-flat-button color="dark" [matMenuTriggerFor]="account" class="mb-3 mx-1"> <mat-icon class="text-white" >menu</mat-icon><span class="text-white">Menu</span></button>
@@ -117,9 +117,9 @@
         <div class="row">
           <div class="col">
             <div class="content">
-              <div fxLayout=" wrap" fxLayoutGap="10px grid">
+              <div fxLayout=" wrap" fxLayoutGap="5px grid">
                 <div fxFlex.xs="100%" *ngFor="let row of filteredProduct">
-                  <mat-card class="mat-elevation-z4" style="height: 270px !important;width: 200px;">
+                  <mat-card class="mat-elevation-z4" style="height: 200px !important;width: 160px;">
                     <mat-card-header>
                       <mat-card-title>
                         <strong>P{{row.Price | number: '1.2'}}</strong>
@@ -127,7 +127,7 @@
                       </mat-card-title>
                     
                     </mat-card-header>
-                    <img  height="150"    mat-card-image src="{{getImage(row)}}" />
+                    <img  height="80"    mat-card-image src="{{getImage(row)}}" />
                     <mat-card-actions>
                       <button class="mx-2" matTooltip="Add to cart" (click)="addData(row)" mat-mini-fab color="primary">
                         <mat-icon>add</mat-icon>

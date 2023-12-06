@@ -68,7 +68,8 @@ import { PosClientDebitComponent } from './pos-cashier/pos-client-debit/pos-clie
 import { PosSelectCustomerComponent } from './pos-cashier/pos-select-customer/pos-select-customer.component';
 import { PosDebitPaymentComponent } from './pos-cashier/pos-debit-payment/pos-debit-payment.component';
 import { PosDebitRepaymentComponent } from './pos-cashier/pos-debit-repayment/pos-debit-repayment.component';
-import { PosDebitHistoryComponent } from './pos-cashier/pos-debit-history/pos-debit-history.component'
+import { PosDebitHistoryComponent } from './pos-cashier/pos-debit-history/pos-debit-history.component';
+import { PosSearchproductComponent } from './pos-cashier/pos-searchproduct/pos-searchproduct.component'
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { PosDebitHistoryComponent } from './pos-cashier/pos-debit-history/pos-de
     PosDebitPaymentComponent,
     PosDebitRepaymentComponent,
     PosDebitHistoryComponent,
+    PosSearchproductComponent,
     
   ],
   imports: [

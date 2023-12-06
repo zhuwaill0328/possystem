@@ -114,6 +114,7 @@ export class PosDebitPaymentComponent implements OnInit {
        this.http.post(this.mdb.getDebitEndPoint(queryType.INSERT),bodydata, {responseType: 'json', headers: this.mdb.headers})
        .subscribe((data:any)=>{
         if(data.status){
+          
           this.addData(data.data.Transaction.Id);
         }
           Swal.fire(data.message)
@@ -190,7 +191,7 @@ export class PosDebitPaymentComponent implements OnInit {
         let submitFlag = {
           submitFlag : true
         }
-
+        console.log('Trans Id',data.data)
         this.dialogref.close(submitFlag);
        
       }

@@ -15,6 +15,7 @@ import { PosCustomerDisplayComponent } from '../pos-customer/pos-customer-displa
 import { PosSelectCustomerComponent } from './pos-select-customer/pos-select-customer.component';
 import { PosDebitPaymentComponent } from './pos-debit-payment/pos-debit-payment.component';
 import { PosClientDebitComponent } from './pos-client-debit/pos-client-debit.component';
+import { PosSearchproductComponent } from './pos-searchproduct/pos-searchproduct.component';
 
 enum PaymentType{
   CASH = 0,
@@ -188,8 +189,27 @@ onBlur(event:any) {
 
   searchProduct(control: any) {
     const filter = control.target.value;
-    this.filteredProduct = this.products.filter((data: any) =>
-      data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter);
+    this.filteredProduct = this.products.filter((data: any) => data.Serials.Barcode == filter);
+
+
+  }
+
+  openSearch(){
+    this.modalOpen = true
+    this.dialog.open(PosSearchproductComponent,{
+      width : '90vw',
+      height : '90vh'
+    }).afterClosed().subscribe((data:any)=>{
+      if(data){
+        if(data.submitFlag){
+          this.addData(data.item,true)
+        }
+         
+      }
+
+      this.modalOpen =false
+      
+    })
 
 
   }
