@@ -143,6 +143,7 @@ onBlur(event:any) {
         this.products = data.data.filter((data: any) => data.Stocks.Quantity > 0);
 
         this.filteredProduct =this.products
+        this.filterProducts('')
 
 
       })
@@ -179,12 +180,20 @@ onBlur(event:any) {
     return count;
   }
 
-
+ 
   filterProducts(value: any) {
+    const keyword  = value.toLowerCase();
+    if (keyword == ''){
+      this.filteredProduct = this.products.filter((data: any) => data.Essentials === true);
 
-    this.filteredProduct = this.products.filter((data: any) => data.Category.toLowerCase().includes(value.toLowerCase()));
+
+    }else{
+      this.filteredProduct = this.products.filter((data: any) => data.Category.toLowerCase().includes(keyword));
 
 
+    }
+
+  
   }
 
   scrollto(){

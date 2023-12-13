@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, FormBuilder } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -42,7 +42,8 @@ export class POSProductsComponent implements OnInit {
     price: new FormControl(0.00, Validators.min(1)),
     cost: new FormControl(0.00, Validators.min(1)),
     image: new FormControl(),
-    unit: new FormControl('Kg', Validators.required)
+    unit: new FormControl('Kg', Validators.required),
+    essential: new FormControl(false,Validators.required)
   })
 
   defaultAlert: any = [{
@@ -55,7 +56,8 @@ export class POSProductsComponent implements OnInit {
 
 
 
-  constructor(private gf: GlobalfunctionsService,private dialog: MatDialog, private http: HttpClient, private mdb: MongodbService,private auth: AuthService) {
+  constructor(private fb :FormBuilder,
+    private gf: GlobalfunctionsService,private dialog: MatDialog, private http: HttpClient, private mdb: MongodbService,private auth: AuthService) {
 
   }
 
@@ -74,6 +76,21 @@ export class POSProductsComponent implements OnInit {
   setupTableSorter(){
     this.datasource.paginator = this.paginator
     this.datasource.sort = this.sort
+  }
+
+  get fromControls() {
+    return this.form as FormGroup;
+  }
+
+  soldbyChanged(event:any){
+    const value = event.target.value;
+    if(value == "Quantity"){
+      this.fromControls.get('weight')?.removeValidators(Validators.required)
+      this.fromControls.get('unit')?.removeValidators(Validators.required)
+    }else{
+ this.fromControls.controls['weight'].addValidators(Validators.required)
+      this.fromControls.controls['unit'].addValidators(Validators.required)
+    }
   }
 
   storedData:any=[]
@@ -276,9 +293,11 @@ export class POSProductsComponent implements OnInit {
     this.form.controls.price.patchValue(data.Price)
     this.form.controls.cost.patchValue(data.Cost)
     this.form.controls.unit.patchValue(data.Stocks.UnitofMeasurement)
+    this.form.controls.essential.patchValue(data.Essentials)
     this.updating = true;
     this.selectedFileName = data.Image
     this.datatoupdate = data;
+  
 
     this.imgurl = environment.EndPoint + "uploads/img_" + data.Image
 
@@ -490,7 +509,8 @@ export class POSProductsComponent implements OnInit {
       },
       Price: this.form.value.price,
       Cost: this.form.value.cost,
-      Image: this.selectedFileName
+      Image: this.selectedFileName,
+      Essentials: this.form.value.essential
 
     }
 

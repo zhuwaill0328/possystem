@@ -67,7 +67,7 @@
     
                             <mat-form-field class="example-full-width">
                                 <mat-label>Sold by</mat-label>
-                                <mat-select #sold formControlName="soldby" value="Quantity">
+                                <mat-select #sold formControlName="soldby" (valueChange)="soldbyChanged($event)" value="Quantity">
                                     <mat-option value="Quantity">Quantity</mat-option>
                                     <mat-option value="Weight">Weight</mat-option>
                                 </mat-select>
@@ -144,6 +144,10 @@
                                 <mat-label>Price</mat-label>
                                 <input matInput type="number" formControlName="price" placeholder="0.00">
                             </mat-form-field>
+                        </div>
+
+                        <div class="col">
+                            <p><mat-checkbox formControlName="essential">Essential?</mat-checkbox></p>
                         </div>
     
                 
