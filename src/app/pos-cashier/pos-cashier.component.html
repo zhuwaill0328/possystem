@@ -57,18 +57,18 @@
       </div>
     </div>
     
-    <div class="container-fluid cart-footer">
+    <div class="container cart-footer">
       <div class="row">
         <div class="col-1 text-white mt-3">
           <p>Total:</p>
         </div>
-        <div class="col text-warning mt-3 ">
+        <div class="col text-warning mt-3">
           <p style="font-size: 3.2rem;" class="float-end"><strong>P {{ getTotalCost() | number: '1.2' }}</strong></p>
         </div>
         <hr>
       </div>
 
-      <div class="row m-0 ">
+      <div class="row mb-2 ">
        <div class="col-sm-3">
         <button class="btn-payment  "  routerLink="../client-debit" mat-raised-button color="primary">DEBIT (PAUTANG)</button>
     
@@ -101,8 +101,8 @@
           </mat-form-field>
           
           <div class="box">
-            <button mat-flat-button color="accent" (click)="openSearch()" class="mb-3 mx-1">Search Product</button>
-            <button mat-flat-button color="accent" (click)="openCamera()" class="mb-3 mx-1">Open Camera</button>
+            <!--<button mat-flat-button color="accent" (click)="openSearch()" class="mb-3 mx-1">Search Product</button>-->
+           <!-- <button mat-flat-button color="accent" (click)="openCamera()" class="mb-3 mx-1">Open Camera</button>-->
            <button mat-flat-button color="primary" (click)="openGcash(3)" class="mb-3 mx-1 "> GCASH IN</button>
            <button mat-flat-button color="warn" (click)="openGcash(4)" class="mb-3 mx-1 "> GCASH OUT</button>
            <button mat-flat-button color="dark" [matMenuTriggerFor]="account" class="mb-3 mx-1"> <mat-icon class="text-white" >menu</mat-icon><span class="text-white">Menu</span></button>
