@@ -76,7 +76,7 @@ unfilterddebits:any = []
         customer:{
           Name : transaction.Customer.Name,
           Total : transaction.Transaction.Amount.toFixed(2),
-          Balance: transaction.Transaction.Balance.toFixed(2)
+          Balance: transaction.Transaction?.Balance.toFixed(2) | 0.00
         }
       }
     })

@@ -16,6 +16,7 @@ import { PosSelectCustomerComponent } from './pos-select-customer/pos-select-cus
 import { PosDebitPaymentComponent } from './pos-debit-payment/pos-debit-payment.component';
 import { PosClientDebitComponent } from './pos-client-debit/pos-client-debit.component';
 import { PosSearchproductComponent } from './pos-searchproduct/pos-searchproduct.component';
+import { PosBarcodeScannerComponent } from './pos-barcode-scanner/pos-barcode-scanner.component';
 
 enum PaymentType{
   CASH = 0,
@@ -148,6 +149,13 @@ onBlur(event:any) {
 
   }
 
+  openCamera(){
+    this.dialog.open(PosBarcodeScannerComponent,{
+      width: '90vw',
+      height: '90vh'
+    })
+  }
+
   getImage(row: any) {
 
     return environment.EndPoint + "uploads/img_" + row.Image;
@@ -189,7 +197,8 @@ onBlur(event:any) {
 
   searchProduct(control: any) {
     const filter = control.target.value;
-    this.filteredProduct = this.products.filter((data: any) => data.Serials.Barcode == filter);
+    this.filteredProduct = this.products.filter((data: any) => data.Serials.Barcode == filter
+    || data.Name.toLowerCase().includes(filter.toLowerCase()));
 
 
   }

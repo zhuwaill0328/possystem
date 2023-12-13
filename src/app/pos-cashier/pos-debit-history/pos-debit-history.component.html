@@ -2,8 +2,14 @@
     <h1>Payment History</h1>
     <p>Customer: {{customer.Name}} </p>
     <p>Total Amount (UTANG): {{customer.Total}}</p>
-    <h1>Current Balance:  : {{customer.Balance}}</h1>
+    <div *ngIf="customer.Balance > 0 ">
+        <h1>Current Balance:  : {{customer.Balance}}</h1>
    
+    </div>
+    <div *ngIf="customer.Balance <= 0">
+        <h1>Status: PAID</h1>
+    </div>
+    
      <table class="table table-bordered table-responsive table-striped">
         <thead>
             <tr>
@@ -17,7 +23,7 @@
                     Changed
                 </th>
                 <th>
-                    User
+                    Received By
                 </th>
             </tr>
         </thead>

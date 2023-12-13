@@ -69,8 +69,10 @@ import { PosSelectCustomerComponent } from './pos-cashier/pos-select-customer/po
 import { PosDebitPaymentComponent } from './pos-cashier/pos-debit-payment/pos-debit-payment.component';
 import { PosDebitRepaymentComponent } from './pos-cashier/pos-debit-repayment/pos-debit-repayment.component';
 import { PosDebitHistoryComponent } from './pos-cashier/pos-debit-history/pos-debit-history.component';
-import { PosSearchproductComponent } from './pos-cashier/pos-searchproduct/pos-searchproduct.component'
-
+import { PosSearchproductComponent } from './pos-cashier/pos-searchproduct/pos-searchproduct.component';
+import { PosBarcodeScannerComponent } from './pos-cashier/pos-barcode-scanner/pos-barcode-scanner.component'
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { FormatsDialogComponent } from './pos-cashier/pos-barcode-scanner/formats-dialog/formats-dialog.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +102,8 @@ import { PosSearchproductComponent } from './pos-cashier/pos-searchproduct/pos-s
     PosDebitRepaymentComponent,
     PosDebitHistoryComponent,
     PosSearchproductComponent,
+    PosBarcodeScannerComponent,
+    FormatsDialogComponent,
     
   ],
   imports: [
@@ -146,7 +150,8 @@ import { PosSearchproductComponent } from './pos-cashier/pos-searchproduct/pos-s
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatTreeModule
+    MatTreeModule,
+    ZXingScannerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
