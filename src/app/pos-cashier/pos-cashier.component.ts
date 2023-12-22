@@ -296,7 +296,7 @@ onBlur(event:any) {
             this.results.splice(0,1)
         }
         this.results = []
-
+        this.datasource = new MatTableDataSource(this.results)
         
         this.table.renderRows();
         this.getTotalCost()
@@ -331,6 +331,7 @@ onBlur(event:any) {
               this.results.splice(0,1)
           }
           this.results = []
+          this.datasource = new MatTableDataSource(this.results)
 
           
           this.table.renderRows();
@@ -340,6 +341,8 @@ onBlur(event:any) {
             title: parseFloat(result.changes).toFixed(2),
             text: "Changed",
             confirmButtonText: "New Transaction"
+          }).then(()=>{
+            //window.location.reload();
           })
         }
   

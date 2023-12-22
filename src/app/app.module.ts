@@ -73,6 +73,7 @@ import { PosSearchproductComponent } from './pos-cashier/pos-searchproduct/pos-s
 import { PosBarcodeScannerComponent } from './pos-cashier/pos-barcode-scanner/pos-barcode-scanner.component'
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { FormatsDialogComponent } from './pos-cashier/pos-barcode-scanner/formats-dialog/formats-dialog.component';
+import { POSDashboardComponent } from './pos-dashboard/pos-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ import { FormatsDialogComponent } from './pos-cashier/pos-barcode-scanner/format
     PosSearchproductComponent,
     PosBarcodeScannerComponent,
     FormatsDialogComponent,
+    POSDashboardComponent,
     
   ],
   imports: [

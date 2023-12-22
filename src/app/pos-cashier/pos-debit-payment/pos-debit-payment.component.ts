@@ -113,11 +113,14 @@ export class PosDebitPaymentComponent implements OnInit {
    
        this.http.post(this.mdb.getDebitEndPoint(queryType.INSERT),bodydata, {responseType: 'json', headers: this.mdb.headers})
        .subscribe((data:any)=>{
+        console.log(data.data.Transaction.Id)
         if(data.status){
           
           this.addData(data.data.Transaction.Id);
-        }
+          console.log(data.data)
           Swal.fire(data.message)
+        }
+        
           
        })
 
@@ -162,6 +165,7 @@ export class PosDebitPaymentComponent implements OnInit {
 
     });
 
+    console.log(id)
 
     const bodyData = {
       _id : id,
@@ -186,12 +190,11 @@ export class PosDebitPaymentComponent implements OnInit {
     }
 
     this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
-
+      //console.log('Alert Error',data)
       if (data.status) {
         let submitFlag = {
           submitFlag : true
         }
-        console.log('Trans Id',data.data)
         this.dialogref.close(submitFlag);
        
       }
