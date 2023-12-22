@@ -70,6 +70,7 @@ unfilterddebits:any = []
   }
 
   openlist(transaction:any){
+    console.log(transaction)
     this.dialog.open(PosDebitHistoryComponent,{
       data : {
         history : transaction.Transaction.PaymentHistory,
@@ -80,6 +81,7 @@ unfilterddebits:any = []
         }
       }
     })
+    
   }
 
   updatePayments(transaction:any){
@@ -90,7 +92,7 @@ unfilterddebits:any = []
     })
 
     result.afterClosed().subscribe((data:any)=>{
-      console.log(data)
+      window.location.reload();
     });
   }
 
