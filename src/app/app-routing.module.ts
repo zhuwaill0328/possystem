@@ -15,6 +15,7 @@ import { PosSystemComponent } from './pos-system/pos-system.component';
 import { CustomerCrudComponent } from './pos-customer/customer-crud/customer-crud.component';
 import { POSCustomerComponent } from './pos-customer/pos-customer.component';
 import { PosClientDebitComponent } from './pos-cashier/pos-client-debit/pos-client-debit.component';
+import { PosOnlineDashboardComponent } from './pos-online-dashboard/pos-online-dashboard.component';
 
 const routes: Routes = [
   {
@@ -64,6 +65,10 @@ const routes: Routes = [
   },
   {
     path: '', redirectTo:'login' , pathMatch: "full"
+  },
+  {
+    component : PosOnlineDashboardComponent,
+    path :'onlineview',pathMatch : 'full'
   }
 
 ];

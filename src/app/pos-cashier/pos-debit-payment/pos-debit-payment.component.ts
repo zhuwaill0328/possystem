@@ -195,7 +195,7 @@ export class PosDebitPaymentComponent implements OnInit {
           submitFlag : true,
           customer: this.customer.value.Name,
           id: id,
-          balance: this.compute()
+          balance: this.paymentHistory.value.Amount
         }
         Swal.fire('Debit Created Successfully')
         this.dialogref.close(submitFlag);

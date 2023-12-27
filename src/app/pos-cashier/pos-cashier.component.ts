@@ -286,7 +286,8 @@ onBlur(event:any) {
        Amount: this.getTotalCost(),
        Customer: customer,
        TransactionId: id,
-       InitialPayment: payment
+       InitialPayment: payment,
+       Date: Date.now()
     }
     this.fs.collection('Pos Transactions').add(transaction_data)
   }
@@ -342,7 +343,7 @@ onBlur(event:any) {
         this.modalOpen = false
         if (result.submitFlag) {
   
-          this.saveToFireStore('Cash Payment','Walk-in',result.id)
+          this.saveToFireStore('Cash Payment','Walk-in',result.id,this.getTotalCost())
           
           while(this.results.length > 0){
               this.results.splice(0,1)

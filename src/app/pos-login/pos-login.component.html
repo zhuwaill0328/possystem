@@ -32,13 +32,21 @@
     
         </mat-card-content>
         <mat-card-actions align="end">
-
-            <button (click)="login()" mat-raised-button color="primary">Login</button>
            
+            <button (click)="login()" class="ms-4" mat-raised-button color="primary">Login</button>
+            <button style="width: 100%;" class="mx-4"  mat-flat-button (click)="openonlineview()">ONLINE VIEW</button>
+
+          
+       
         </mat-card-actions>
+
+        
     </mat-card>
 
     
 </form>
+
+<button flo mat-flat-button (click)="openonlineview()">ONLINE VIEW</button>
+
           
 </div>

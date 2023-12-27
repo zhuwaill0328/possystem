@@ -109,7 +109,8 @@ export class PosGcashModalComponent implements OnInit {
       Fee: this.gcashForm.value.TransactionFee,
       Account: this.gcashForm.value.User?.Phone,
       User : this.gcashForm.value.CurrentUser,
-      FeeDeducted: this.isdeducted
+      FeeDeducted: this.isdeducted,
+      Date: Date.now()
     }
     this.fs.collection('Gcash Transaction').add(data)
 
@@ -124,13 +125,13 @@ export class PosGcashModalComponent implements OnInit {
       .subscribe((data:any)=>{
         if(data.status){
           this.savetoFireStore()
-
-          
-          this.dialogref.close()
+        
 
           Swal.fire({
             title: 'Success',
             icon:'success'
+          }).then(()=>{
+            this.dialogref.close()
           })
         }
       })

@@ -41,6 +41,10 @@ export class POSLoginComponent implements OnInit {
     if(result) this.router.navigate(['/home/dashboard'])
   }
 
+  async openonlineview(){
+    this.router.navigate(['onlineview'])
+  }
+
 
   async login() {
 

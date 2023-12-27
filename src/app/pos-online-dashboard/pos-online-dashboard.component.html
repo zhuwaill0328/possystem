@@ -1,1 +1,163 @@
-<p>pos-online-dashboard works!</p>
+<div class="container p-3">
+
+    <div class="container-fluid">
+
+        <div class="cards">
+            <mat-card class="example-card">
+                <mat-card-header>
+                  <mat-card-title-group>
+                    <mat-card-title>{{totalTransactionCash | number:'0.00'}}</mat-card-title>
+                    <mat-card-subtitle>Total Sales (CASH Onhand)</mat-card-subtitle>
+                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+                  </mat-card-title-group>
+                </mat-card-header>
+        
+              </mat-card>
+    
+              <mat-card class="example-card">
+                <mat-card-header>
+                  <mat-card-title-group>
+                    <mat-card-title>{{totalTransactionDebit | number:'0.00'}}</mat-card-title>
+                    <mat-card-subtitle>Total Sales (Debit - UTANG)</mat-card-subtitle>
+                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+                  </mat-card-title-group>
+                </mat-card-header>
+        
+              </mat-card>
+    
+              <mat-card class="example-card">
+                <mat-card-header>
+                  <mat-card-title-group>
+                    <mat-card-title>{{totalCashIn | number:'0.00'}}</mat-card-title>
+                    <mat-card-subtitle>Total CASH IN</mat-card-subtitle>
+                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+                  </mat-card-title-group>
+                </mat-card-header>
+        
+              </mat-card>
+    
+              <mat-card class="example-card">
+                <mat-card-header>
+                  <mat-card-title-group>
+                    <mat-card-title>{{totalCashOut | number:'0.00'}}</mat-card-title>
+                    <mat-card-subtitle>Total CASH OUT</mat-card-subtitle>
+                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+                  </mat-card-title-group>
+                </mat-card-header>
+        
+              </mat-card>
+    
+              
+        </div>
+    
+    
+    </div>
+    <div class="row mt-3">
+        <h1>Daily Transactions</h1>
+        <table class=" table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Customer
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Initial Payment
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of transactions">
+                    <td>
+                        {{row.Customer}}
+                    </td>
+                    <td>
+                        {{row.Date | date : 'MMMM d, y h:mm:ss'}}
+                    </td>
+                    <td>
+                        {{row.Amount}}
+                    </td>
+                    <td>
+                        {{row.InitialPayment}}
+                    </td>
+                    <td>
+                        {{row.Payment}}
+                    </td>
+        
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<hr>
+    <div class="row">
+        <h1>Daily Gcash Transactions</h1>
+        <table class=" table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Gcash Number
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Fee
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Reference Number
+                    </th>
+                    <th>
+                        Processed By
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of gcashtransactions">
+                    <td>
+                        {{row.Date | date : 'MMMM d, y h:mm:ss'}}
+                    </td>
+                    <td>
+                        {{row.Account}}
+                    </td>
+                    <td>
+                        {{row.Amount}}
+                    </td>
+                    <td>
+                        {{row.Fee}}
+                    </td>
+                    <td>
+                        {{row.Type}}
+                    </td>
+                    <td>
+                        {{row.FeeDeducted? 'Fee deducted' : 'Fee not deducted'}}
+                    </td>
+                    <td>
+                        {{row.ReferenceNumber}}
+                    </td>
+                    <td>
+                        {{row.User}}
+                    </td>
+
+        
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
