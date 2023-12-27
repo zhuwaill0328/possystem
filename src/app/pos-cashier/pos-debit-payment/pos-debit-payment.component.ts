@@ -96,7 +96,7 @@ export class PosDebitPaymentComponent implements OnInit {
          Customer : this.customer.value,
          Username: sessionStorage.getItem('user'),
          Transaction: {
-            Id : Date.now(),
+            Id : '',
             Amount: this.transaction.value.Amount,
             Date: Date.now(),
             Balance: this.compute(),
@@ -113,12 +113,11 @@ export class PosDebitPaymentComponent implements OnInit {
    
        this.http.post(this.mdb.getDebitEndPoint(queryType.INSERT),bodydata, {responseType: 'json', headers: this.mdb.headers})
        .subscribe((data:any)=>{
-        console.log(data.data.Transaction.Id)
+        console.log(data.data._id)
         if(data.status){
           
-          this.addData(data.data.Transaction.Id);
-          console.log(data.data)
-          Swal.fire(data.message)
+          this.addData(data.data._id);
+        
         }
         
           
@@ -189,17 +188,21 @@ export class PosDebitPaymentComponent implements OnInit {
 
     }
 
-    this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
+    this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe(async (data: any) => {
       //console.log('Alert Error',data)
       if (data.status) {
         let submitFlag = {
-          submitFlag : true
+          submitFlag : true,
+          customer: this.customer.value.Name,
+          id: id,
+          balance: this.compute()
         }
+        Swal.fire('Debit Created Successfully')
         this.dialogref.close(submitFlag);
        
       }
       else {
-        alert(data.message);
+        Swal.fire(data.message)
       }
 
     });

@@ -74,6 +74,16 @@ import { PosBarcodeScannerComponent } from './pos-cashier/pos-barcode-scanner/po
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { FormatsDialogComponent } from './pos-cashier/pos-barcode-scanner/formats-dialog/formats-dialog.component';
 import { POSDashboardComponent } from './pos-dashboard/pos-dashboard.component';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { environment } from '../environments/environment';
+import { PosOnlineDashboardComponent } from './pos-online-dashboard/pos-online-dashboard.component';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -106,12 +116,19 @@ import { POSDashboardComponent } from './pos-dashboard/pos-dashboard.component';
     PosBarcodeScannerComponent,
     FormatsDialogComponent,
     POSDashboardComponent,
+    PosOnlineDashboardComponent,
+    PosDebitHistoryComponent,
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    DataTablesModule,
     HttpClientModule,
     TypeaheadModule,
     AlertModule,
@@ -153,7 +170,10 @@ import { POSDashboardComponent } from './pos-dashboard/pos-dashboard.component';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    provideFirebaseApp(() => initializeApp({"projectId":"possystem-ec218","appId":"1:906559112444:web:917f2d1213f8e70ed10379","storageBucket":"possystem-ec218.appspot.com","apiKey":"AIzaSyCYst_54ufn5D-weoNo1qp-3ZJCB89aUjQ","authDomain":"possystem-ec218.firebaseapp.com","messagingSenderId":"906559112444"})),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore())
   ],
   providers: [],
   bootstrap: [AppComponent]

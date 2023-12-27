@@ -1,10 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
 import {Location} from '@angular/common'
 import { MatDialog } from '@angular/material/dialog';
 import { PosDebitRepaymentComponent } from '../pos-debit-repayment/pos-debit-repayment.component';
 import { PosDebitHistoryComponent } from '../pos-debit-history/pos-debit-history.component';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-pos-client-debit',
   templateUrl: './pos-client-debit.component.html',
@@ -12,15 +16,25 @@ import { PosDebitHistoryComponent } from '../pos-debit-history/pos-debit-history
 })
 export class PosClientDebitComponent implements OnInit {
 
+  
   constructor(private http: HttpClient,
     private mdb:MongodbService,
     private _location: Location,
     private dialog: MatDialog){
     
   }
-  ngOnInit(): void {
-    this.clientDebits();
-  }
+  @ViewChild(MatTable) table : MatTable<any>;
+  @ViewChild('debitlist') paginator : MatPaginator;
+  @ViewChild('debitlistpaid') paginatorpaid : MatPaginator;
+  datasource: MatTableDataSource<any>
+
+  debitcolumns: any = ['customer','date','reference','amount','balance','list','status','username','action']
+
+ paiddatasource: MatTableDataSource<any>
+  
+  paidcolumns: any = ['customer','date','reference','amount','balance','list','status','username','action']
+
+
 
 
   goback(){
@@ -37,8 +51,25 @@ unfilterddebits:any = []
       this.debits = data.data
       this.storeddebits =  data.data
       this.unfilterddebits = data.data
-      this.filterbystatus('Unpaid')
+      const unpaid = this.filterbystatus('Unpaid');
+      const paid = this.filterbystatus('paid')
+      this.datasource = new MatTableDataSource<any>(unpaid);
+      this.paiddatasource = new MatTableDataSource<any>(paid)
+      this.resetSandP();
     })
+  }
+
+  resetSandP(){
+    this.datasource.paginator = this.paginator;
+    this.paiddatasource.paginator = this.paginatorpaid;
+
+    if(this.datasource.paginator){
+      this.datasource.paginator.firstPage();
+    }
+    if(this.paiddatasource.paginator){
+      this.paiddatasource.paginator.firstPage();
+    }
+    this.settingFilter();
   }
 
   selectedStatus:any = 'Unpaid'
@@ -53,21 +84,47 @@ unfilterddebits:any = []
     (item:any) => item.Status.toLowerCase() == keyword
     )
 
-    this.storeddebits = data;
-    this.debits =this.storeddebits
+   return data;
+  }
+
+  searchv2(event :Event){
+    const value = (event.target as HTMLInputElement).value;
+    this.datasource.filter = value.trim().toLocaleLowerCase();
+  }
+
+  settingFilter(){
+    this.datasource.filterPredicate = (option:any,value:string) : boolean =>{
+      if(value){
+        return (option.Customer.Name)?.trim().toLowerCase().includes(value)
+        || (option.Transaction.Id)?.trim().toLowerCase().includes(value)
+
+      }else return false
+
+    }
+
+    this.paiddatasource.filterPredicate = (option:any,value:string) : boolean =>{
+      if(value){
+        return (option.Customer.Name)?.trim().toLowerCase().includes(value)
+        || (option.Transaction.Id)?.trim().toLowerCase().includes(value)
+
+      }else return false
+
+    }
   }
 
   search(event:any){
-   const keyword = event.target.value.toLowerCase()
-    let data:any = []
-   data = this.storeddebits.filter(
-    (item:any) => item.Customer.Name.toLowerCase().includes(keyword)
-    || item.Transaction.Id.toLowerCase().includes(keyword)
-    )
-
-    this.debits = data;
+    const value = (event.target as HTMLInputElement).value;
+    this.paiddatasource.filter = value.trim().toLocaleLowerCase();
 
   }
+
+  ngOnInit(): void {
+    this.clientDebits();
+    
+  }
+
+
+   
 
   openlist(transaction:any){
     console.log(transaction)

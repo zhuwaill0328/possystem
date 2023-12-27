@@ -17,6 +17,8 @@ import { PosDebitPaymentComponent } from './pos-debit-payment/pos-debit-payment.
 import { PosClientDebitComponent } from './pos-client-debit/pos-client-debit.component';
 import { PosSearchproductComponent } from './pos-searchproduct/pos-searchproduct.component';
 import { PosBarcodeScannerComponent } from './pos-barcode-scanner/pos-barcode-scanner.component';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { tap } from 'rxjs';
 
 enum PaymentType{
   CASH = 0,
@@ -33,7 +35,8 @@ enum PaymentType{
 })
 export class POSCashierComponent implements OnInit {
 
-  constructor(private auth: AuthService, private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog) {
+  constructor(private fs: AngularFirestore,
+    private auth: AuthService, private http: HttpClient, private mdb: MongodbService, private dialog: MatDialog) {
     
    }
 
@@ -277,6 +280,17 @@ onBlur(event:any) {
 
   }
 
+  saveToFireStore(type:any,customer:any,id:any, payment: number = 0.00){
+    const transaction_data = {
+       Payment: type,
+       Amount: this.getTotalCost(),
+       Customer: customer,
+       TransactionId: id,
+       InitialPayment: payment
+    }
+    this.fs.collection('Pos Transactions').add(transaction_data)
+  }
+
   processDebitPayment(){
     if(this.results.length > 0){
       let result = this.dialog.open(PosDebitPaymentComponent,{
@@ -291,6 +305,8 @@ onBlur(event:any) {
      result.afterClosed().subscribe((data:any)=>{
       this.modalOpen = false
         if(data.submitFlag){
+
+          this.saveToFireStore('Debit Payment',data.customer, data.id,data.balance)
            
           while(this.results.length > 0){
             this.results.splice(0,1)
@@ -326,6 +342,7 @@ onBlur(event:any) {
         this.modalOpen = false
         if (result.submitFlag) {
   
+          this.saveToFireStore('Cash Payment','Walk-in',result.id)
           
           while(this.results.length > 0){
               this.results.splice(0,1)

@@ -130,9 +130,11 @@ export class PosPaymentModalComponent implements OnInit {
     this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
 
       if (data.status) {
+        
         let result = {
             submitFlag: true,
-            changes: this.getPaymentChanges()
+            changes: this.getPaymentChanges(),
+            id: data.data._id
         }
 
         this.dialogref.close(result);

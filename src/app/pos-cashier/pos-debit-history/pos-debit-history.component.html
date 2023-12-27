@@ -10,19 +10,19 @@
         <h1>Status: PAID</h1>
     </div>
     
-     <table class="table table-bordered table-responsive table-striped">
+     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger1" class="table table-bordered table-responsive table-striped">
         <thead>
             <tr>
-                <th>
+                <th class="table-header">
                     Date
                 </th>
-                <th>
+                <th class="table-header">
                     Amount Paid
                 </th>
-                <th>
+                <th class="table-header">
                     Changed
                 </th>
-                <th>
+                <th class="table-header">
                     Received By
                 </th>
             </tr>

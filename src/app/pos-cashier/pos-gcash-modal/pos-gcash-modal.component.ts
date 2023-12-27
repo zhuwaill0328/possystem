@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
 import { PosPaymentModalComponent } from '../pos-payment-modal/pos-payment-modal.component';
 import Swal from 'sweetalert2'
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Component({
   selector: 'app-pos-gcash-modal',
   templateUrl: './pos-gcash-modal.component.html',
@@ -18,6 +19,7 @@ export class PosGcashModalComponent implements OnInit {
   gcash_rates:any = []
 
   constructor(private http:HttpClient,
+    private fs: AngularFirestore,
     private mdb: MongodbService, private fb:FormBuilder,
     public dialogref: MatDialogRef<PosGcashModalComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
@@ -97,6 +99,22 @@ export class PosGcashModalComponent implements OnInit {
 
   }
 
+  savetoFireStore(){
+
+
+    const data  = {
+      Amount: this.gcashForm.value.Amount,
+      Type : this.gcashForm.value.TransactionType,
+      ReferenceNumber: this.gcashForm.value.ReferenceNumber,
+      Fee: this.gcashForm.value.TransactionFee,
+      Account: this.gcashForm.value.User?.Phone,
+      User : this.gcashForm.value.CurrentUser,
+      FeeDeducted: this.isdeducted
+    }
+    this.fs.collection('Gcash Transaction').add(data)
+
+  }
+
   processedGcash(){
 
     if(this.gcashForm.valid){
@@ -105,6 +123,8 @@ export class PosGcashModalComponent implements OnInit {
       this.http.post(this.mdb.getGcashEndPoint(queryType.INSERT),bodyData, { responseType: 'json', headers: this.mdb.headers})
       .subscribe((data:any)=>{
         if(data.status){
+          this.savetoFireStore()
+
           
           this.dialogref.close()
 

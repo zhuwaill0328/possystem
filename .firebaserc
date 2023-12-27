@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "possystem-ec218": {
+      "hosting": {
+        "pointofsale": [
+          "possystem-ec218"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "possystem-ec218"
+  }
+}

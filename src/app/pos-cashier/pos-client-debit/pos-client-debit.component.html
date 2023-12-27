@@ -1,56 +1,175 @@
-<mat-toolbar class="stickyHeader mb-2">
-    <button  (click)="goback()" class="mx-2"   mat-flat-button color="primary">
-        <mat-icon>keyboard_backspace</mat-icon><span>Back to POS Terminal</span>
-      </button>
-
-  </mat-toolbar>
-<div class="container-fluid">
-   
-        <h1>Customer Debit Records (PAUTANG)</h1>
-      <div class="row">
-        <mat-form-field >
-            <mat-label>Search</mat-label>
-             <input (keyup)="search($event)" matInput  style="width: 80%;" type="text" >
-         </mat-form-field>
-      </div>
+<div class="container-fluid container-f">
+    <mat-toolbar class="stickyHeader mb-2">
+        <button  (click)="goback()" class="mx-2"   mat-flat-button color="primary">
+            <mat-icon>keyboard_backspace</mat-icon><span>Back to POS Terminal</span>
+          </button>
     
-      <mat-button-toggle-group class="mb-2" name="fontStyle" aria-label="Font Style">
-        <mat-button-toggle [ngClass]=" selectedStatus == 'Unpaid' ? 'selected' : '' " value="Unpaid" (click)="filterbystatus('Unpaid')" value="italic">Unpaid</mat-button-toggle>
-        <mat-button-toggle [ngClass]=" selectedStatus == 'Paid' ? 'selected' : '' " value="Paid"  (click)="filterbystatus('Paid')" value="bold">Paid</mat-button-toggle>
-         </mat-button-toggle-group>
-    <table class="table table-hover table-responsive table-bordered">
-        <thead>
-            <tr>
-                <th>Customer</th>
-                <th>Date</th>
-                <th>Reference Code</th>
-                <th>Transaction Amount</th>
-                <th>Balance</th>
-                <th>Payment History</th>
-                <th>Status</th>
-                <th>Process By</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor=" let c of debits">
-                <td>{{c.Customer.Name}}</td>
-                <td>{{c.Transaction.Date | date: "MMMM dd, yyyy hh:mm:ss"}}</td>
-                <td>{{c.Transaction.Id}}</td>
-                <td>{{c.Transaction.Amount | number : '.2-2'}}</td>
-                <td>{{c.Transaction?.Balance || 0.00 | number : '.2-2'}}</td>
-                <td>
-                    <button (click)="openlist(c)" mat-button><mat-icon>list</mat-icon></button>
-                </td>
-                <td>
-                    {{c.Status}}
-                </td>
-                <td>{{c.Username}}</td>
-                <td>
-    
-                    <button [disabled]="c.Status =='Paid'" mat-button (click)="updatePayments(c)"><mat-icon>edit</mat-icon> Update Payment</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+      </mat-toolbar>
+    <main>
+        <mat-tab-group>
+            <mat-tab label="UNPAID">
+                <h1>Customer Debit Records (PAUTANG)</h1>
+                <div class="row">
+                  <mat-form-field >
+                      <mat-label>Search</mat-label>
+                       <input (keyup)="searchv2($event)" matInput  style="width: 80%;" type="text" >
+                   </mat-form-field>
+                </div>
+              
+               <!-- <mat-button-toggle-group class="mb-2" name="fontStyle" aria-label="Font Style">
+                  <mat-button-toggle [ngClass]=" selectedStatus == 'Unpaid' ? 'selected' : '' " value="Unpaid" (click)="filterbystatus('Unpaid')" value="italic">Unpaid</mat-button-toggle>
+                  <mat-button-toggle [ngClass]=" selectedStatus == 'Paid' ? 'selected' : '' " value="Paid"  (click)="filterbystatus('Paid')" value="bold">Paid</mat-button-toggle>
+                   </mat-button-toggle-group>-->
+                   <mat-paginator #debitlist pageSize="20" aria-label="Select page of debits" ></mat-paginator>
+              <table mat-table [dataSource]="datasource" class="mat-elevation-z8">
+        
+          
+                  <ng-container matColumnDef="customer">
+                      <th mat-header-cell *matHeaderCellDef> Customer </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Customer.Name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="date">
+                      <th mat-header-cell *matHeaderCellDef> Date </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Transaction.Date}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="reference">
+                      <th mat-header-cell *matHeaderCellDef>Reference Number </th>
+                      <td mat-cell *matCellDef="let element"> {{element._id}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef> Amount </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Transaction.Amount  | number : '.2-2'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="balance">
+                      <th mat-header-cell *matHeaderCellDef> Balance </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Transaction?.Balance || 0.00 | number : '.2-2'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="list">
+                      <th mat-header-cell *matHeaderCellDef> History </th>
+                      <td mat-cell *matCellDef="let element">  <button (click)="openlist(element)" mat-button><mat-icon>list</mat-icon></button> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef> Status </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="username">
+                      <th mat-header-cell *matHeaderCellDef>User </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Username}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef> No. </th>
+                      <td mat-cell *matCellDef="let element"> <button [disabled]="element.Status =='Paid'" mat-button (click)="updatePayments(element)"><mat-icon>edit</mat-icon> Update Payment</button></td>
+                    </ng-container>
+          
+                    <tr mat-header-row *matHeaderRowDef="debitcolumns"></tr>
+                    <tr mat-row *matRowDef="let element; columns : debitcolumns;"></tr>
+          
+              
+              </table>
+             
+                    </mat-tab>
+            <mat-tab label="PAID">
+                        <h1>Customer Debit Records (PAUTANG)</h1>
+                        <div class="row">
+                          <mat-form-field >
+                              <mat-label>Search</mat-label>
+                               <input (keyup)="search($event)" matInput id="paidsearch"  style="width: 80%;" type="text" >
+                           </mat-form-field>
+                        </div>
+                      
+                       <!-- <mat-button-toggle-group class="mb-2" name="fontStyle" aria-label="Font Style">
+                          <mat-button-toggle [ngClass]=" selectedStatus == 'Unpaid' ? 'selected' : '' " value="Unpaid" (click)="filterbystatus('Unpaid')" value="italic">Unpaid</mat-button-toggle>
+                          <mat-button-toggle [ngClass]=" selectedStatus == 'Paid' ? 'selected' : '' " value="Paid"  (click)="filterbystatus('Paid')" value="bold">Paid</mat-button-toggle>
+                           </mat-button-toggle-group>-->
+                           <mat-paginator #paginatorpaid pageSize="20" aria-label="Select page of debits" ></mat-paginator>
+                      <table mat-table [dataSource]="paiddatasource" class="mat-elevation-z8">
+                
+                  
+                          <ng-container matColumnDef="customer">
+                              <th mat-header-cell *matHeaderCellDef> Customer </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Customer.Name}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="date">
+                              <th mat-header-cell *matHeaderCellDef> Date </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Transaction.Date}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="reference">
+                              <th mat-header-cell *matHeaderCellDef>Reference Number </th>
+                              <td mat-cell *matCellDef="let element"> {{element._id}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                              <th mat-header-cell *matHeaderCellDef> Amount </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Transaction.Amount  | number : '.2-2'}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="balance">
+                              <th mat-header-cell *matHeaderCellDef> Balance </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Transaction?.Balance || 0.00 | number : '.2-2'}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="list">
+                              <th mat-header-cell *matHeaderCellDef> History </th>
+                              <td mat-cell *matCellDef="let element">  <button (click)="openlist(element)" mat-button><mat-icon>list</mat-icon></button> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                              <th mat-header-cell *matHeaderCellDef> Status </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="username">
+                              <th mat-header-cell *matHeaderCellDef>User </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Username}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action">
+                              <th mat-header-cell *matHeaderCellDef> No. </th>
+                              <td mat-cell *matCellDef="let element"> <button [disabled]="element.Status =='Paid'" mat-button (click)="updatePayments(element)"><mat-icon>edit</mat-icon> Update Payment</button></td>
+                            </ng-container>
+                  
+                            <tr mat-header-row *matHeaderRowDef="paidcolumns"></tr>
+                            <tr mat-row *matRowDef="let element; columns : paidcolumns;"></tr>
+                  
+                      
+                      </table>
+                     
+                            </mat-tab>
+          </mat-tab-group>
+        <div class="">
+            
+           
+         
+         <!-----
+           <table  class="table table-hover table-responsive table-bordered">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Reference Code</th>
+                        <th>Transaction Amount</th>
+                        <th>Balance</th>
+                        <th>Payment History</th>
+                        <th>Status</th>
+                        <th>Process By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor=" let c of debits">
+                        <td>{{c.Customer.Name}}</td>
+                        <td>{{c.Transaction.Date | date: "MMMM dd, yyyy hh:mm:ss"}}</td>
+                        <td>{{c.Transaction.Id}}</td>
+                        <td>{{c.Transaction.Amount | number : '.2-2'}}</td>
+                        <td>{{c.Transaction?.Balance || 0.00 | number : '.2-2'}}</td>
+                        <td>
+                            <button (click)="openlist(c)" mat-button><mat-icon>list</mat-icon></button>
+                        </td>
+                        <td>
+                            {{c.Status}}
+                        </td>
+                        <td>{{c.Username}}</td>
+                        <td>
+            
+                            <button [disabled]="c.Status =='Paid'" mat-button (click)="updatePayments(c)"><mat-icon>edit</mat-icon> Update Payment</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>-->
+        </div>
+    </main>
 </div>

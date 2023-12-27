@@ -2,3 +2,12 @@
     background: blue !important;
     color: white !important;
 }
+main{
+    overflow-y: auto;
+    padding: 1rem;
+}
+.container-f{
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
