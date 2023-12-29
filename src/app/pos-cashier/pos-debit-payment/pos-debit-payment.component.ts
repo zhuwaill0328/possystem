@@ -7,6 +7,9 @@ import { POSCustomerComponent } from 'src/app/pos-customer/pos-customer.componen
 import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
 import Swal from 'sweetalert2';
 import { v4 as uuidV4} from 'uuid'
+
+import firebase from 'firebase/compat/app'
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Component({
   selector: 'app-pos-debit-payment',
   templateUrl: './pos-debit-payment.component.html',
@@ -14,8 +17,9 @@ import { v4 as uuidV4} from 'uuid'
 })
 export class PosDebitPaymentComponent implements OnInit {
 
-  constructor(private http: HttpClient,private mdb: MongodbService
-    ,private dialog: MatDialog
+  constructor(private http: HttpClient,private mdb: MongodbService,
+    private fs: AngularFirestore,
+    private dialog: MatDialog
     , public dialogref: MatDialogRef<PosDebitPaymentComponent>,@Inject(MAT_DIALOG_DATA) public data: any
     ){
       this.transaction.controls['Amount'].patchValue(data.amount)
@@ -191,6 +195,40 @@ export class PosDebitPaymentComponent implements OnInit {
     this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe(async (data: any) => {
       //console.log('Alert Error',data)
       if (data.status) {
+
+        let total: any ;
+        let totalDebit: any ;
+        let docRef= this.fs.collection('Dashboard')
+        let dateObj = new Date(firebase.firestore.Timestamp.now().toDate());
+        let month = dateObj.getUTCMonth() + 1;
+        let day = dateObj.getUTCDate();
+        let year = dateObj.getUTCFullYear();
+
+ 
+         docRef.doc(year + "-" + month + "-" + day).get().subscribe( async (info:any)=>{
+           let ref:any = info.data();
+             if(isNaN(ref?.TotalSales)) total = 0;
+             else  total =ref.TotalSales ;
+
+             if(isNaN(ref?.TotalDebit)) totalDebit = 0;
+             else totalDebit = ref.TotalDebit;
+
+
+            
+             let val:any = this.paymentHistory.value?.Amount
+             let debit :any = this.compute();
+             
+             let res  = {
+               "Date":firebase.firestore.Timestamp.now() ,
+               "TotalSales" : parseFloat(val) + parseFloat(total),
+               "TotalDebit" : parseFloat(debit) + parseFloat(totalDebit)
+             }
+         
+             await docRef.doc(year + "-" + month + "-" + day).set(res, {merge :true}).then(()=>{
+            
+            })
+           
+        })
         let submitFlag = {
           submitFlag : true,
           customer: this.customer.value.Name,

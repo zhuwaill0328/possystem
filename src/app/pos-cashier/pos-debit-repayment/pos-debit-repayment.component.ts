@@ -4,7 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
 import Swal from 'sweetalert2';
-
+import firebase from 'firebase/compat/app';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Component({
   selector: 'app-pos-debit-repayment',
   templateUrl: './pos-debit-repayment.component.html',
@@ -20,6 +21,7 @@ export class PosDebitRepaymentComponent {
   transaction: any 
 
   constructor(private http: HttpClient,
+    private fs : AngularFirestore,
     private mdb : MongodbService,
     public dialogref: MatDialogRef<PosDebitRepaymentComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any)
@@ -100,9 +102,41 @@ export class PosDebitRepaymentComponent {
           if(result.status){
             this.http.patch(this.mdb.getDebitEndPoint(queryType.UPDATE),bodyData, {responseType: 'json', headers: this.mdb.headers} )
             .subscribe((results:any)=>{
+             
+
 
               if(results.status){
-                this.dialogref.close()
+                
+              let total: any ;
+
+              let docRef= this.fs.collection('Dashboard')
+              let dateObj = new Date(firebase.firestore.Timestamp.now().toDate());
+              let month = dateObj.getUTCMonth() + 1;
+              let day = dateObj.getUTCDate();
+              let year = dateObj.getUTCFullYear();
+      
+       
+               docRef.doc(year + "-" + month + "-" + day).get().subscribe( async (info:any)=>{
+                 let ref:any = info.data();
+                   if(isNaN(ref?.DebitSale)) total = 0;
+                   else  total =ref.DebitSale ;
+      
+                  
+                   let val:any = data.newBalance <= 0 ? data.Amount : this.paymentgroup.value.amount
+                   let res  = {
+                     "Date":firebase.firestore.Timestamp.now() ,
+                     "DebitSale" : parseFloat(val) + parseFloat(total),
+                     
+                   }
+               
+                await docRef.doc(year + "-" + month + "-" + day).set(res, {merge :true}).then(()=>{
+                  this.dialogref.close()
+                })
+       
+                
+                 
+              })
+                
           }
           
         })

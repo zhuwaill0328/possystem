@@ -6,6 +6,7 @@ import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
 import { PosPaymentModalComponent } from '../pos-payment-modal/pos-payment-modal.component';
 import Swal from 'sweetalert2'
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import firebase  from 'firebase/compat/app';
 @Component({
   selector: 'app-pos-gcash-modal',
   templateUrl: './pos-gcash-modal.component.html',
@@ -116,6 +117,52 @@ export class PosGcashModalComponent implements OnInit {
 
   }
 
+  saveGcash(){
+    let cashin: any ;
+        let cashout: any ;
+        let docRef= this.fs.collection('Dashboard')
+        let dateObj = new Date(firebase.firestore.Timestamp.now().toDate());
+        let month = dateObj.getUTCMonth() + 1;
+        let day = dateObj.getUTCDate();
+        let year = dateObj.getUTCFullYear();
+
+ 
+         docRef.doc(year + "-" + month + "-" + day).get().subscribe( async (info:any)=>{
+           let ref:any = info.data();
+             if(isNaN(ref?.CashIn)) cashin = 0;
+             else  cashin =ref.CashIn ;
+
+             if(isNaN(ref?.CashOut)) cashout = 0;
+             else cashout = ref.CashOut;
+             let cin:any = this.gcashForm.value.Amount
+             let cout :any = this.gcashForm.value.Amount
+             
+            if(this.transactionType == 3) {
+
+              let res  = {
+                "Date":firebase.firestore.Timestamp.now() ,
+                "CashIn" : parseFloat(cin) + parseFloat(cashin)
+              }
+              await docRef.doc(year + "-" + month + "-" + day).set(res, {merge :true}).then(()=>{
+            
+              })
+            }else{
+              let res  = {
+                "Date":firebase.firestore.Timestamp.now() ,
+                "CashOut" : parseFloat(cout) + parseFloat(cashout)
+              }
+              await docRef.doc(year + "-" + month + "-" + day).set(res, {merge :true}).then(()=>{
+            
+              })
+            }
+            
+           
+         
+            
+           
+        })
+  }
+
   processedGcash(){
 
     if(this.gcashForm.valid){
@@ -125,6 +172,7 @@ export class PosGcashModalComponent implements OnInit {
       .subscribe((data:any)=>{
         if(data.status){
           this.savetoFireStore()
+          this.saveGcash();
         
 
           Swal.fire({

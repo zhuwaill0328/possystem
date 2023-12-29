@@ -1,4 +1,4 @@
-<div class="container p-3">
+<div class="container p-3 container-f">
 
     <div class="container-fluid">
 
@@ -83,13 +83,13 @@
                         {{row.Date | date : 'MMMM d, y h:mm:ss'}}
                     </td>
                     <td>
-                        {{row.Amount}}
+                        {{row.Amount | number : '2.2'}}
                     </td>
                     <td>
-                        {{row.InitialPayment}}
+                        {{row.InitialPayment | number : '2.2'}}
                     </td>
                     <td>
-                        {{row.Payment}}
+                        {{row.Payment }}
                     </td>
         
                 </tr>
@@ -97,7 +97,7 @@
         </table>
     </div>
 <hr>
-    <div class="row">
+    <div class="row ">
         <h1>Daily Gcash Transactions</h1>
         <table class=" table table-bordered table-striped">
             <thead>

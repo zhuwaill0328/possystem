@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MongodbService, queryType } from 'src/app/shared/mongodb.service';
-
+import firebase from 'firebase/compat/app'
 @Component({
   selector: 'app-pos-payment-modal',
   templateUrl: './pos-payment-modal.component.html',
@@ -20,6 +21,7 @@ export class PosPaymentModalComponent implements OnInit {
 
 
   constructor(private http: HttpClient,
+    private fs : AngularFirestore,
      private mdb : MongodbService,
      public dialogref: MatDialogRef<PosPaymentModalComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -127,10 +129,37 @@ export class PosPaymentModalComponent implements OnInit {
 
     }
 
-    this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
+    this.http.post(this.mdb.getTransactionEndPoint(queryType.INSERT), bodyData, { responseType: 'json', headers: this.mdb.headers }).subscribe( (data: any) => {
 
       if (data.status) {
+      
+        let total: any ;
+       let docRef= this.fs.collection('Dashboard')
+       let dateObj = new Date(firebase.firestore.Timestamp.now().toDate());
+       let month = dateObj.getUTCMonth() + 1;
+       let day = dateObj.getUTCDate();
+       let year = dateObj.getUTCFullYear();
+       console.log(year + "-" + month + "-" + day)
+
+        docRef.doc(year + "-" + month + "-" + day).get().subscribe( async (info:any)=>{
+          let ref:any = info.data();
+            if(isNaN(ref?.TotalSales)) total = 0;
+            else  total =ref.TotalSales ;
+           
+            let val:any = this.payment.value?.total
+            let res  = {
+              "Date":firebase.firestore.Timestamp.now() ,
+              "TotalSales" : parseFloat(val) + parseFloat(total)
+            }
         
+            await docRef.doc(year + "-" + month + "-" + day).set(res, {merge :true}).then(()=>{
+            
+            })
+         
+          
+       })
+
+     
         let result = {
             submitFlag: true,
             changes: this.getPaymentChanges(),

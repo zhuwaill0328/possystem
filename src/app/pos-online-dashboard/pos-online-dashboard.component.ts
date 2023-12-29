@@ -26,6 +26,8 @@ export class PosOnlineDashboardComponent implements OnInit {
     this.fs.collection('Gcash Transaction',filter => filter.orderBy('Date','desc')).snapshotChanges()
     .pipe().subscribe((data:any)=>{
       this.gcashtransactions =[]
+      this.totalCashIn = 0;
+      this.totalCashOut = 0;
       data.forEach((item:any)=>{
         let transaction:any = item.payload.doc.data();
         if(transaction.Type == 'CASH IN') this.totalCashIn+= transaction.Amount;
@@ -47,16 +49,25 @@ export class PosOnlineDashboardComponent implements OnInit {
     this.fs.collection('Pos Transactions',filter => filter.orderBy('Date','desc')).snapshotChanges()
     .pipe().subscribe((data:any)=>{
       this.transactions =[]
+      this.totalTransactionCash = 0;
+      this.totalTransactionDebit = 0;
       data.forEach((item:any)=>{
         let transaction:any = item.payload.doc.data();
-        if(transaction.Payment == 'Debit Payment'){
-          this.totalTransactionDebit += transaction.InitialPayment;
-        }else{
-          this.totalTransactionCash += transaction.Amount;
-        }
+       
+       
         this.transactions.push(transaction);
-      })
+      });
+      for(var transaction of this.transactions){
+        this.totalTransactionCash += transaction.InitialPayment;
+  
+        if(transaction.Payment == 'Debit Payment'){
+          this.totalTransactionDebit += (transaction.Amount - transaction.InitialPayment);
+          
+        }
+      }
     })
+
+   
     
   }
 
