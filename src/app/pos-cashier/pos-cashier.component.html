@@ -94,8 +94,8 @@
       <div class="toolbar">
         <mat-toolbar class="stickyHeader">
           <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 30%;">
-         
-            <input #yourInput  (blur)="onBlur($event)" autofocus (input)="searchProduct($event)" matInput placeholder="Enter Barcode...">
+            <!--(input)="searchProduct($event)"-->
+            <input #yourInput  (blur)="onBlur($event)" autofocus (keydown.enter)="searchProduct($event)"  matInput placeholder="Enter Barcode...">
             <mat-icon matSuffix>search</mat-icon>
            
           </mat-form-field>

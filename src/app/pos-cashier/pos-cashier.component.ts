@@ -211,6 +211,12 @@ onBlur(event:any) {
     const filter = control.target.value;
     this.filteredProduct = this.products.filter((data: any) => data.Serials.Barcode == filter
     || data.Name.toLowerCase().includes(filter.toLowerCase()));
+    if (this.filteredProduct.length > 0){
+      this.addData(this.filteredProduct[0],true)
+      control.target.value =""
+      this.filteredProduct = []
+    }
+    
 
 
   }

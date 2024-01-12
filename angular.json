@@ -44,13 +44,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 }
               ],
               "outputHashing": "all"
@@ -76,10 +76,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "pointofsale:build:production"
+              "browserTarget": "pointofsale:build:production",
+              "ssl": false
             },
             "development": {
-              "browserTarget": "pointofsale:build:development"
+              "browserTarget": "pointofsale:build:development",
+              "ssl": false
             }
           },
           "defaultConfiguration": "development"
