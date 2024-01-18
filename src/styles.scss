@@ -9,8 +9,11 @@
 /* Importing Datepicker SCSS file. */
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
 
-html, body { height: 100% !important; width: 100% !important; }
-body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; font-family: Roboto, "Helvetica Neue", sans-serif; position: relative; }
+html, body { 
+    min-height: 100vh;
+    height: auto;
+    margin: 0; }
+body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .form-control{
     font-size: 16px;
@@ -39,6 +42,7 @@ th{
 }
 .example-full-width{
     width: 100%;
+   
 }
 .half-width{
     width: 50%;
@@ -56,6 +60,7 @@ table{
 @media only screen and (min-width : 320px ) and (max-width : 500px) {
     body{
         width: 100%;
+        height: 100%;
     }
 
     mat-sidenav{

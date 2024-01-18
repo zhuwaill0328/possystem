@@ -46,14 +46,15 @@
     </div>
     <div class="row mb-2">
         <div class="col-sm-4">
-            <input class="btn btn-secondary num-btn"  type="reset" value="clear" >
+            <input class="btn btn-secondary num-btn"  type="button" value="." (click)="calculate($event)">
         </div>
         <div class="col-sm-4">
             <input class="btn btn-secondary num-btn"  type="button" value="0" (click)="calculate($event)">
         </div>
         <div class="col-sm-4">
-            <input class="btn btn-secondary num-btn"  type="button" value="." (click)="calculate($event)">
+            <input class="btn btn-secondary num-btn"  type="reset" value="clear" >
         </div>
+       
     </div>
 
 </form>

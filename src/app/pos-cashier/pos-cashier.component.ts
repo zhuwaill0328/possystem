@@ -190,8 +190,22 @@ onBlur(event:any) {
     const filter = control.target.value;
     this.filteredProduct = this.products.filter((data: any) =>
       data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter);
+  }
 
+  searchBarcode(control:any){
+    const filter = control.target.value;
+    
+    //this.filteredProduct = this.products.filter((data: any) =>
+     // data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter);
 
+      const item:any = this.products.filter((data: any) => data.Serials.Barcode == filter);
+
+      if(item.length == 1){
+        this.addData(item[0])
+        
+      }
+      control.target.value = ""
+      
   }
   customer:any 
   openCustomer(){
@@ -239,6 +253,15 @@ onBlur(event:any) {
 
   }
 
+  clearQtty(){
+    this.qtty = 1;
+  }
+
+  addQtty(event:any){
+    const value :any = event
+    this.qtty =value;
+  }
+  qtty: any = 1;
   processDebitPayment(){
     if(this.results.length > 0){
       let result = this.dialog.open(PosDebitPaymentComponent,{
