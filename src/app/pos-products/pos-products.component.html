@@ -15,7 +15,9 @@
     </div>
     
     <div class=" mb-3">
-        <form [formGroup]="form" (keydown.enter)="$event.preventDefault()" #formDirective="ngForm">
+
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="form" #formDirective="ngForm">
+
             <mat-accordion class="example-headers-align">
                 <mat-expansion-panel expanded="opened">
                     <mat-expansion-panel-header>

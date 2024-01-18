@@ -237,8 +237,24 @@ onBlur(event:any) {
       this.modalOpen =false
       
     })
+    //this.filteredProduct = this.products.filter((data: any) =>
+    //  data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter);
+  }
 
+  searchBarcode(control:any){
+    const filter = control.target.value;
+    
+    //this.filteredProduct = this.products.filter((data: any) =>
+     // data.Name.toLowerCase().includes(filter.toLowerCase()) || data.Serials.Barcode == filter);
 
+      const item:any = this.products.filter((data: any) => data.Serials.Barcode == filter);
+
+      if(item.length == 1){
+        this.addData(item[0])
+        
+      }
+      control.target.value = ""
+      
   }
   customer:any 
   openCustomer(){
@@ -297,6 +313,17 @@ onBlur(event:any) {
     }
     this.fs.collection('Pos Transactions').add(transaction_data)
   }
+
+
+  clearQtty(){
+    this.qtty = 1;
+  }
+
+  addQtty(event:any){
+    const value :any = event
+    this.qtty =value;
+  }
+  qtty: any = 1;
 
   processDebitPayment(){
     if(this.results.length > 0){
