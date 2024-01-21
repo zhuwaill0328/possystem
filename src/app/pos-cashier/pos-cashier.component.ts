@@ -19,6 +19,7 @@ import { PosSearchproductComponent } from './pos-searchproduct/pos-searchproduct
 import { PosBarcodeScannerComponent } from './pos-barcode-scanner/pos-barcode-scanner.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { tap } from 'rxjs';
+import { PosCalcComponent } from './pos-calc/pos-calc.component';
 
 enum PaymentType{
   CASH = 0,
@@ -83,7 +84,29 @@ onBlur(event:any) {
   }
   
 }
+
+setQuantitytoOne(){
+  this.qtty = 1;
+}
+
+addQtyonCart(product:any , numberofitems: any){
+  product.Qty = parseFloat(product.Qty) + parseFloat(numberofitems);
+
+}
   addData(data: any, isadd: boolean = true) {
+    let quantty: number = 0;
+    this.qttyAccept =false
+    if (this.qtty == ""){
+      quantty = 1
+    }else{
+      quantty = parseFloat(this.qtty)
+    }
+
+    if(data.Stocks.Quantity < quantty){
+      
+      this.clearQtty();
+      return;
+    }
     
     if (this.results.length > 0) {
       let index: any = this.results.indexOf(data);
@@ -92,34 +115,43 @@ onBlur(event:any) {
         if (isadd == true) {
 
           if(data.Stocks.Quantity <=0 ){
+            this.clearQtty();
             return;
           }
 
-          if (data.Stocks.Quantity == 0) return;
+          if (data.Stocks.Quantity == 0){
+            this.clearQtty();
+            return;
+          } 
+
           data.Stocks.Quantity--;
-          data.Qty++;
+         this.addQtyonCart(data,quantty)
+
         } else {
           data.Stocks.Quantity++
           if (data.Qty == 1) {
             this.delete(data);
+            this.clearQtty();
             return;
           }
           data.Qty--;
+          this.clearQtty();
         }
 
 
 
       } else {
         data.Stocks.Quantity--;
-        data.Qty = 1;
+        data.Qty = quantty
         this.results.push(data);
       }
 
     } else {
       data.Stocks.Quantity--;
-      data.Qty = 1;
+      data.Qty = quantty
       this.results.push(data);
     }
+    this.clearQtty();
     this.table.renderRows();
     this.scrollto()
   }
@@ -251,22 +283,35 @@ onBlur(event:any) {
 
       if(item.length == 1){
         this.addData(item[0])
-        
+
       }
       control.target.value = ""
       
   }
-  customer:any 
+  customer:any = {
+    Name: "Walk-In"
+  }
   openCustomer(){
     this.modalOpen = true
-    let result = this.dialog.open(PosClientDebitComponent,{
+    let result = this.dialog.open(PosSelectCustomerComponent,{
       minWidth:'50vw'
     })
     .afterClosed().subscribe((data:any)=>{
-      this.customer =data
+      this.customer =data.data
+      console.log(this.customer)
       this.modalOpen = false
     })
 
+  }
+
+  openDebitList(){
+    this.modalOpen = true;
+
+    this.dialog.open(PosDebitPaymentComponent,{
+      width: '90vw',
+    }).afterClosed().subscribe(()=>{
+      this.modalOpen = false
+    })
   }
 
   openGcash(type: PaymentType = PaymentType.CASHIN ){
@@ -316,12 +361,59 @@ onBlur(event:any) {
 
 
   clearQtty(){
-    this.qtty = 1;
+    this.qtty = "";
+    this.qttyAccept =true 
+ 
   }
 
+  qttyAccept:boolean =true
+  openQty(){
+
+    if(this.qttyAccept == true) this.qttyAccept =false;
+    else this.qttyAccept =true;
+
+    this.qtty = ""
+    /**
+     * this.modalOpen =true;
+   let result =  this.dialog.open(PosCalcComponent,{
+    width: '30vw',
+
+
+
+    })
+
+    result.afterClosed().subscribe((data:any)=>{
+      this.modalOpen =false
+    })
+
+     */
+
+  }
+
+  recentvalue: any = "";
+  clear:boolean =false;
   addQtty(event:any){
     const value :any = event
-    this.qtty =value;
+    if(value == "."){
+      if(this.qtty.toString().includes(".")){
+        return;
+      }else{
+        let val:any = this.qtty + value;
+        this.qtty = val
+      }
+
+    }else{
+
+      let val:any = this.qtty + value;
+      this.qtty = val
+      
+
+
+
+     
+    
+    }
+  
   }
   qtty: any = 1;
 
@@ -332,7 +424,8 @@ onBlur(event:any) {
         minHeight: '40vh',
         data : {
           amount : this.getTotalCost(),
-          cart : this.results
+          cart : this.results,
+          customer: this.customer
         }
      })
  

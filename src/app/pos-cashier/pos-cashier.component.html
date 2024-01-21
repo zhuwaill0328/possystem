@@ -13,21 +13,22 @@
       
     </mat-menu>
     
- 
-    <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 30%;">
+    
+    <mat-form-field  class="mt-3" appearance="fill" style="height: 70px;width: 300px;">
          
-      <input #yourInput  (blur)="onBlur($event)"  (keydown.enter)="searchBarcode($event)" autofocus matInput placeholder="Enter Barcode...">
-     <span class="text-dark">{{qtty}}</span><mat-icon class="text-dark" matSuffix>clear</mat-icon>
+      <input #yourInput  (blur)="onBlur($event)" (keydown.F9)="processPayment(0)" (keydown.F10)="openQty()"   (keydown.F8)="processPayment(2)" (keydown.F7)="openCustomer()" (keydown.escape)="clearQtty()" (keydown.enter)="searchBarcode($event)" autofocus matInput placeholder= "x{{qtty == 0 ? '1' : qtty}}  Enter Barcode...">
+
      
     </mat-form-field>
     
     <div class="box">
-      
+      <button mat-button class="mb-3 mx-1" >Customer: {{customer.Name}}</button>
      <button mat-flat-button color="primary" (click)="openGcash(3)" class="mb-3 mx-1 "> GCASH IN</button>
      <button mat-flat-button color="warn" (click)="openGcash(4)" class="mb-3 mx-1 "> GCASH OUT</button>
      <button mat-flat-button color="dark" [matMenuTriggerFor]="account" class="mb-3 mx-1"> <mat-icon class="text-white" >menu</mat-icon><span class="text-white">Menu</span></button>
       <mat-menu #account="matMenu" xPosition="before">
         <button mat-menu-item>Acount</button>
+        <button mat-menu-item routerLink="../client-debit">UTANG List</button>
         <button *ngIf="admin" mat-menu-item routerLink="/home/dashboard">Back to Dashboard</button>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
@@ -113,32 +114,34 @@
       </section>
 
       <section>
+       
         
-        <h1 class="text-warning p-2 total "><strong>Total: <span >P {{ getTotalCost() | number: '1.2' }}</span></strong></h1>
+        <h1 class="text-warning p-2 total " style="text-align: end;"><strong>Total: <span >P {{ getTotalCost() | number: '1.2' }}</span></strong></h1>
 
       </section>
+      
       <section>
         <mat-grid-list cols="6" rowHeight="6:2">
-          <mat-grid-tile colspan="2"  rowspan="2"><button (click)="openCustomer()" class="example-full-width" mat-stroked-button><mat-icon>group</mat-icon> Customer</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('1')" class="example-full-width " mat-stroked-button>1</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('2')"   class="example-full-width" mat-stroked-button>2</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('3')"  class="example-full-width" mat-stroked-button>3</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button class="example-full-width bg-light" mat-stroked-button>Qty</button></mat-grid-tile>
-          <mat-grid-tile colspan="2" rowspan="3"><button (click)="processPayment(2)" class="example-full-width" style="height: 100%;" mat-stroked-button><mat-icon>terminal</mat-icon>DEBIT/UTANG</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('4')"  class="example-full-width " mat-stroked-button>4</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('5')"  class="example-full-width" mat-stroked-button>5</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('6')"  class="example-full-width" mat-stroked-button>6</button></mat-grid-tile>
+          <mat-grid-tile colspan="2"  rowspan="2"><button (click)="openCustomer()" class="example-full-width" mat-stroked-button><mat-icon>group</mat-icon> Customer [F7] </button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('1')" class="example-full-width " mat-stroked-button>1</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('2')"   class="example-full-width" mat-stroked-button>2</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('3')"  class="example-full-width" mat-stroked-button>3</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button (click)="openQty()" class="example-full-width bg-light" mat-stroked-button>Qty (F10)</button></mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="3"><button (click)="processPayment(2)" class="example-full-width" style="height: 100%;" mat-stroked-button><mat-icon>terminal</mat-icon>CREDIT (UTANG) [F8]</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('4')"  class="example-full-width " mat-stroked-button>4</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('5')"  class="example-full-width" mat-stroked-button>5</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('6')"  class="example-full-width" mat-stroked-button>6</button></mat-grid-tile>
           <mat-grid-tile rowspan="2"><button  class="example-full-width" disabled mat-flat-button>%Disc</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('7')"  class="example-full-width " mat-stroked-button>7</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('8')"  class="example-full-width" mat-stroked-button>8</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('9')"  class="example-full-width" mat-stroked-button>9</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('7')"  class="example-full-width " mat-stroked-button>7</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('8')"  class="example-full-width" mat-stroked-button>8</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('9')"  class="example-full-width" mat-stroked-button>9</button></mat-grid-tile>
           <mat-grid-tile rowspan="2"><button class="example-full-width" mat-stroked-button>Price</button></mat-grid-tile>
-          <mat-grid-tile colspan="2" rowspan="3"><button (click)="processPayment(0)" class="example-full-width" style="height: 100%;" mat-stroked-button><mat-icon>terminal</mat-icon>Payment</button></mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="3"><button (click)="processPayment(0)" class="example-full-width" style="height: 100%;" mat-stroked-button><mat-icon>terminal</mat-icon>Payment [F19]</button></mat-grid-tile>
         
           <mat-grid-tile rowspan="2"><button   class="example-full-width " mat-stroked-button>+/-</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="addQtty('10')"  class="example-full-width" mat-stroked-button>10</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button class="example-full-width" mat-stroked-button>.</button></mat-grid-tile>
-          <mat-grid-tile rowspan="2"><button (click)="clearQtty()" class="example-full-width" mat-stroked-button>Clear</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('0')"  class="example-full-width" mat-stroked-button>0</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button [disabled]="qttyAccept" (click)="addQtty('.')"  class="example-full-width" mat-stroked-button>.</button></mat-grid-tile>
+          <mat-grid-tile rowspan="2"><button (click)="clearQtty()" class="example-full-width" mat-stroked-button>Clear [ESC]</button></mat-grid-tile>
         </mat-grid-list>
       </section>
       

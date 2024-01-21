@@ -1,6 +1,7 @@
 <p class="page-header">Products</p>
 
 <button *ngIf="!openeditor" class="mb-2" mat-raised-button type="submit" color="primary" (click)="addNew()">Add New Product</button>
+<button *ngIf="!openeditor" class="mb-2 mx-1" mat-raised-button type="submit" color="primary" (click)="addStocks()">Add Stocks using Barcode</button>
 
 <div *ngIf="openeditor" class="container-fluid">
     <div class="">

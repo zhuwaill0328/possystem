@@ -26,6 +26,10 @@ export class PosDebitPaymentComponent implements OnInit {
       this.transactionData = {
         cart : data.cart
       }
+
+      this.customer.controls['Name'].patchValue (data.customer.Name)
+      this.customer.controls['Id'].patchValue(data.customer._id)
+      this.customer.controls['Phone'].patchValue (data.customer.Phone)
       
     }
  

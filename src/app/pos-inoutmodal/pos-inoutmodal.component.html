@@ -1,4 +1,6 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (keydown.enter)="$event.preventDefault()" >
+
+
 
     <mat-card class="p-2">
         <mat-card-header>
@@ -7,11 +9,19 @@
         </mat-card-header>
         <mat-card-content>
 
-            <h2>{{currentProduct.Name}}</h2>
+            <div *ngIf="isBarcode" class="row ">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Barcode</mat-label>
+                    <input  matInput type="text" (keydown.enter)="checkProduct($event)" formControlName="Barcode" placeholder="Enter Barcode">
+                </mat-form-field>
+        
+            </div>
+
+            <h2>{{currentProduct?.Name || 'Select Product'}}</h2>
             <div class="row ">
                 <mat-form-field class="example-full-width">
                     <mat-label>Current Stocks</mat-label>
-                    <input matInput type="number" readonly="true" [value]="currentProduct.Stocks.Quantity">
+                    <input matInput type="number" readonly="true" [value]="currentProduct?.Stocks?.Quantity || 0">
                 </mat-form-field>
 
             </div>
@@ -27,7 +37,7 @@
         </mat-card-content>
         <mat-card-actions align="end">
             <button color="warn" mat-button mat-dialog-close>Cancel</button>
-            <button mat-button mat-dialog-close (click)="create()" cdkFocusInitial>{{isStockin? "Stock In" : isConsume? 'Consume':  "Stock Out"}}</button>
+            <button mat-button (click)="create()" >{{isStockin? "Stock In" : isConsume? 'Consume':  "Stock Out"}}</button>
         </mat-card-actions>
     </mat-card>
 

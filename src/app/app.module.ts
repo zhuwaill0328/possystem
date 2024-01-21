@@ -84,6 +84,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from '../environments/environment';
 import { PosOnlineDashboardComponent } from './pos-online-dashboard/pos-online-dashboard.component';
 import { DataTablesModule } from 'angular-datatables';
+import { PosCalcComponent } from './pos-cashier/pos-calc/pos-calc.component';
+import { PosProductAddstockComponent } from './pos-product-addstock/pos-product-addstock.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +120,8 @@ import { DataTablesModule } from 'angular-datatables';
     POSDashboardComponent,
     PosOnlineDashboardComponent,
     PosDebitHistoryComponent,
+    PosCalcComponent,
+    PosProductAddstockComponent,
     
   ],
   imports: [

@@ -263,6 +263,23 @@ export class POSProductsComponent implements OnInit {
 
   }
 
+  addStocks(){
+
+    let dialogRef = this.dialog.open(PosInoutmodalComponent,{
+      width : '30vw',
+      data: {
+        Type : "Stock In",
+        withBarcode : true
+      }
+
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getData();
+    })
+    
+  }
+
   updating: boolean = false;
   datatoupdate: any;
   readonly: boolean = false;
@@ -406,6 +423,8 @@ export class POSProductsComponent implements OnInit {
       return this.form.value.unit;
     }
   }
+
+ 
 
   StockIn(data:any) {
 

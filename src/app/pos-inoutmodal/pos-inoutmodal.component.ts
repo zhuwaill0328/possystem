@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { AuthService } from '../shared/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MongodbService, queryType } from '../shared/mongodb.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pos-inoutmodal',
@@ -18,8 +19,10 @@ export class PosInoutmodalComponent implements OnInit {
   currentUser: any = this.auth.getCurrentUser();
   isStockin: boolean = false;
   isConsume: boolean =false;
+  isBarcode: boolean =false;
 
   form = new FormGroup({
+    Barcode: new FormControl(''),
     Id: new FormControl('', Validators.required),
     Product: new FormControl('', Validators.required),
     Category: new FormControl('', Validators.required),
@@ -31,12 +34,60 @@ export class PosInoutmodalComponent implements OnInit {
 
     if (this.data.Type == 'Stock In') this.isStockin = true;
     else if(this.data.Type == 'Consume') this.isConsume = true;
+    if(this.data.withBarcode == true) this.isBarcode = true;
     this.currentProduct = this.data;
-    this.loadData();
+
+    if(!this.isBarcode){
+      this.loadData();
+    }else{
+      this.getData();
+    }
+    
    
   }
 
+  checkProduct(barcode:any){
+    const code: string = barcode.target.value.trim()
+
+    let item:any = this.productlist.filter( (item:any)=> item.Serials.Barcode == code);
+
+     if(item.length == 1){
+        this.currentProduct = item[0];
+        this.currentProduct.Type = "Stock In"
+        this.loadData()
+        barcode.target.value = ""
+     }
+  
+  }
+
+
+  resetFields(){
+    this.currentProduct = {}
+           this.form.controls["Barcode"].patchValue("")
+           this.form.controls["Id"].patchValue("")
+           this.form.controls["Product"].patchValue("")
+           this.form.controls["Id"].patchValue("")
+           this.form.controls["CurrentQuantity"].patchValue(0)
+           this.form.controls["Quantity"].patchValue(0)
+  }
+  
+  productlist:any = []
+
+  async getData() {
+    this.productlist = []
+
+    this.http.get(this.mdb.getProductEndpoint(queryType.READ)  ,{ responseType: 'json', headers: this.mdb.headers }).subscribe((data: any) => {
+    
+      if(data.status){
+          this.productlist =data.data
+      }
+    
+    })
+
+  }
+
   loadData(){
+    console.log(this.currentProduct)
     this.form.controls.Id.patchValue(this.currentProduct._id);
     this.form.controls.Product.patchValue(this.currentProduct.Name);
     this.form.controls.Category.patchValue(this.currentProduct.Category);
@@ -45,6 +96,11 @@ export class PosInoutmodalComponent implements OnInit {
   
   create() {
 
+
+    if(this.form.controls['Quantity'].value == 0){
+      Swal.fire("Please input number of items to be added!")
+      return;
+    }
     if (this.form.valid) {
       let qt = this.form.value.Quantity? this.form.value.Quantity : 0;
       let curr = this.currentProduct.Stocks.Quantity;
@@ -75,7 +131,13 @@ export class PosInoutmodalComponent implements OnInit {
         responseType: 'json', headers: this.mdb.headers
       }).subscribe((result:any)=>{
 
-        //console.log(result)
+        if(!this.isBarcode){
+          this.dialogRef.close();
+        }else{
+          this.resetFields();
+        }
+
+       
 
       })
 
