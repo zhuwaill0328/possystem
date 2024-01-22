@@ -47,7 +47,7 @@
                 
               </mat-card-title>
             </mat-card-header>
-            <img  height="100"    mat-card-image src="{{getImage(row)}}" />
+            <img  height="100"    mat-card-image src="{{row.Image ? getImage(row) : 'assets/brandx.jfif'}}" />
             <mat-card-actions>
               <button class="mx-2" matTooltip="Add to cart" (click)="addData(row)" mat-mini-fab color="primary">
                 <mat-icon>add</mat-icon>

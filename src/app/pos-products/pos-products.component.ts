@@ -43,7 +43,7 @@ export class POSProductsComponent implements OnInit {
     cost: new FormControl(0.00, Validators.min(1)),
     image: new FormControl(),
     unit: new FormControl('Kg', Validators.required),
-    essential: new FormControl(false,Validators.required)
+    essential: new FormControl(false)
   })
 
   defaultAlert: any = [{
@@ -479,7 +479,8 @@ export class POSProductsComponent implements OnInit {
       },
       Price: this.form.value.price,
       Cost: this.form.value.cost,
-      Image: this.selectedFileName
+      Image: this.selectedFileName,
+      Essentials: this.form.value.essential
 
     }
 

@@ -88,7 +88,7 @@ export class PosDebitRepaymentComponent {
         })
 
         const bodyData = this.transaction
-        console.log(bodyData)
+        //console.log(bodyData)
 
         const transactionData = {
           Id: bodyData.Transaction.Id,
@@ -141,6 +141,8 @@ export class PosDebitRepaymentComponent {
           
         })
 
+          }else{
+            alert(result.message)
           }
        });
         
